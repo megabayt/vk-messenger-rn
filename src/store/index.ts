@@ -3,7 +3,7 @@ import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
 import { persistCombineReducers, persistStore, PersistConfig } from 'redux-persist';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import {PersistedState} from 'redux-persist/es/types';
+import { PersistedState } from 'redux-persist/es/types';
 
 import { reducers } from '@/store/reducers';
 import { IActionsUnion } from '@/store/actions';

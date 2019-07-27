@@ -1,2 +1,62 @@
-export const createApisauceService = () => null;
-export type IApisauceService = null;
+import { ApiErrorResponse, ApiResponse, ApisauceInstance, create } from 'apisauce';
+import { config } from '@/constants/api';
+import { serialize } from '@/utils/helpers';
+import { IChatsParams, IChatsResponse } from '@/store/actions/chat.actions';
+
+export const createApisauceService = (): IApisauceService => {
+  const api: ApisauceInstance = create({
+    baseURL: config.BASE_URL,
+    headers: {
+      Accept: 'application/json',
+      'Content-type': 'application/json',
+      connection: 'keep-alive',
+    },
+    withCredentials: true,
+    timeout: config.TIMEOUT,
+  });
+
+  return {
+    getConversations: (params) =>
+      api.get(`/messages.getConversations?extended=1${serialize(params)}`),
+  };
+};
+export type IApisauceService = {
+  getConversations: (params: IChatsParams) => Promise<ApiResponse<ICommonResponse<IChatsResponse>>>;
+};
+
+
+export interface ICommonOkResponse<T> {
+  response: T;
+}
+export interface ICommonErrorResponse<P> {
+  error: {
+    errorCode: number;
+    errorMsg: string;
+    requestParams: ReadonlyArray<P>;
+  };
+}
+export type ICommonResponse<T, P = {}> = ICommonOkResponse<T> | ICommonErrorResponse<P>;
+
+export const okResponse: ApiResponse<{}> = {
+  config: {},
+  duration: 1000,
+  headers: {},
+  ok: true,
+  originalError: null,
+  problem: null,
+  status: 200,
+};
+
+export const errResponse: ApiErrorResponse<{}> = {
+  ...okResponse,
+  ok: false,
+  problem: 'SERVER_ERROR',
+  originalError: {
+    code: '',
+    config: {},
+    message: '',
+    name: '',
+    request: {},
+    stack: '',
+  },
+};

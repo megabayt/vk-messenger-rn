@@ -5,7 +5,7 @@ import { View } from 'react-native';
 
 import { store, persistor } from '@/store';
 
-export const App = () => (
+export const App = (): React.ReactElement => (
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <View />
