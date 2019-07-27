@@ -22,16 +22,21 @@ module.exports = {
         '@typescript-eslint/array-type': ['error', 'generic'],
         '@typescript-eslint/object-literal-sort-keys': 0,
         // I в IProps не нужно писать для интерфейсов (правильно просто Props)
-        '@typescript-eslint/interface-name-prefix': ['error', 'never'],
+        '@typescript-eslint/interface-name-prefix': ['error', 'always'],
         // Разрешает type A = {} вместо interface A {}
         '@typescript-eslint/prefer-interface': 'off',
         // Не использовать any
         '@typescript-eslint/no-explicit-any': 'warn',
         // У функций нужно определять return type
-        '@typescript-eslint/explicit-function-return-type': 'warn',
+        '@typescript-eslint/explicit-function-return-type': ['warn', {
+            allowExpressions: true,
+            allowTypedFunctionExpressions: true,
+            allowHigherOrderFunctions: true,
+        }],
         // Можно использовать переменные до их объявления (нужно для Styled-components)
         '@typescript-eslint/no-use-before-define': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
+        '@typescript-eslint/indent': ["error", 2],
 
 
         /** COMMON RULES */
