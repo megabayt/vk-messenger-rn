@@ -5,10 +5,10 @@ import { persistCombineReducers, persistStore, PersistConfig } from 'redux-persi
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { PersistedState } from 'redux-persist/es/types';
 
-import { reducers } from '@store/reducers';
-import { IActionsUnion } from '@store/actions';
-import { sagaInit } from '@store/sagas';
-import { createApisauceService } from '@utils/apisauce';
+import { reducers } from '@/store/reducers';
+import { IActionsUnion } from '@/store/actions';
+import { sagaInit } from '@/store/sagas';
+import { createApisauceService } from '@/utils/apisauce';
 
 const persistConfig: PersistConfig = {
   key: 'root',

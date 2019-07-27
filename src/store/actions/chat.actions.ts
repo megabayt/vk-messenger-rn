@@ -1,6 +1,6 @@
 import { Action } from 'redux';
-import { ICommonResponse } from '@utils/apisauce';
-import { IAttachment } from '@interfaces';
+import { ICommonResponse } from '@/utils/apisauce';
+import { IAttachment } from '@/interfaces';
 
 export enum ChatActionTypes {
   ChatsFetch = 'CHATS_FETCH',

@@ -1,6 +1,6 @@
-import { chatsFetch, chatsSet, IChatsResponse } from '@store/actions/chat.actions';
-import { chatReducer, initialChatState } from '@store/reducers/chat.reducer';
-import { ICommonResponse } from '@utils/apisauce';
+import { chatsFetch, chatsSet, IChatsResponse } from '@/store/actions/chat.actions';
+import { chatReducer, initialChatState } from '@/store/reducers/chat.reducer';
+import { ICommonResponse } from '@/utils/apisauce';
 
 describe('chat reducer', () => {
   it('should set fetch flag', () => {

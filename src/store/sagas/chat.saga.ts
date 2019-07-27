@@ -2,14 +2,14 @@ import { SagaIterator } from 'redux-saga';
 import { takeLatest, call, put } from 'redux-saga/effects';
 
 import { ApiResponse } from 'apisauce';
-import { IApisauceService, ICommonOkResponse, ICommonResponse } from '@utils/apisauce';
+import { IApisauceService, ICommonOkResponse, ICommonResponse } from '@/utils/apisauce';
 import {
   ChatActionTypes,
   chatsSet,
   IChatAction,
   IChatsParams,
   IChatsResponse,
-} from '@store/actions/chat.actions';
+} from '@/store/actions/chat.actions';
 
 export const chatsFetchSaga = (function* (api, action) {
   const result: ApiResponse<ICommonResponse<IChatsResponse>> =

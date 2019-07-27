@@ -23,7 +23,7 @@ module.exports = {
     '<rootDir>',
   ],
   moduleNameMapper: {
-    '@(.*)$': '<rootDir>/src/$1',
+    '@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
     // eslint-disable-next-line
