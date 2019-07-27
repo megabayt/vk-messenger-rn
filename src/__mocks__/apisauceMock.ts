@@ -1,4 +1,4 @@
-import { IApisauceService, okResponse } from '@/utils/apisauce';
+import { IApisauceService, okResponse } from '@utils/apisauce';
 
 export const apisauceMock: IApisauceService = {
   getConversations: jest.fn(async () => ({

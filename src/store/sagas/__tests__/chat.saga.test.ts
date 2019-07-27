@@ -1,13 +1,13 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { chatsFetchSaga, watchChat } from '@/store/sagas/chat.saga';
-import { apisauceMock } from '@/__mocks__/apisauceMock';
+import { chatsFetchSaga, watchChat } from '@store/sagas/chat.saga';
+import { apisauceMock } from '@__mocks__/apisauceMock';
 import {
   ChatActionTypes,
   chatsFetch, chatsSet, IChatsParams, IChatsResponse,
-} from '@/store/actions/chat.actions';
-import { stepper } from '@/utils/tests';
-import { ICommonOkResponse } from '@/utils/apisauce';
+} from '@store/actions/chat.actions';
+import { stepper } from '@utils/tests';
+import { ICommonOkResponse } from '@utils/apisauce';
 
 describe('Chat sagas', () => {
   it('should fetch chats', async () => {

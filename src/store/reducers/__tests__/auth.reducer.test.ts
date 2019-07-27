@@ -1,5 +1,5 @@
-import { setToken, unsetToken } from '@/store/actions/auth.actions';
-import { authReducer, initialAuthState } from '@/store/reducers/auth.reducer';
+import { setToken, unsetToken } from '@store/actions/auth.actions';
+import { authReducer, initialAuthState } from '@store/reducers/auth.reducer';
 
 describe('auth reducer', () => {
   it('should set token', () => {

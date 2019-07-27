@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import produce from 'immer';
 
 import { ChatActionTypes, IChatAction, IChatsResponse } from '../actions/chat.actions';
-import { ICommonResponse } from '@/utils/apisauce';
+import { ICommonResponse } from '@utils/apisauce';
 
 export interface IChatState {
   readonly chats: {
