@@ -5,9 +5,29 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "eslint": "eslint -c .eslintrc.js './src/**/*.tsx'",
+    "fix-eslint:staged": "eslint --fix -c .eslintrc.js",
+    "fix-eslint": "eslint --fix -c .eslintrc.js './src/**/*.tsx'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/!(*.test).tsx": [
+      "yarn fix-eslint:staged",
+      "git add"
+    ]
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-native": "^3.7.0",
+    "husky": "^3.0.1",
+    "lint-staged": "^9.2.1",
     "react": "16.8.6",
     "react-native": "0.60.4"
   },
