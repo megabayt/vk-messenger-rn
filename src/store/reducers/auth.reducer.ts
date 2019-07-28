@@ -15,4 +15,5 @@ export const authReducer = ((state = initialAuthState, action) => {
     case AuthActionTypes.UnsetToken:
       return { ...state, token: '' };
   }
+  return state;
 }) as Reducer<IAuthState, IAuthAction>;

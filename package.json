@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
+    "start:reset-cache": "rm -rf /tmp/haste-map-react-native-packager-*; react-native start --reset-cache",
     "test": "jest",
     "tsc-lint": "tsc --noEmit -p tsconfig.json",
     "eslint": "eslint -c .eslintrc.js './src/**/*.{ts,tsx}'",
@@ -25,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "apisauce": "^1.0.3",
+    "babel-plugin-module-resolver": "^3.2.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-native": "^3.7.0",
