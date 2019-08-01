@@ -9,7 +9,7 @@ import { config } from '@/constants/api';
 import { IStateUnion } from '@/store/reducers';
 import { setToken } from '@/store/actions/auth.actions';
 
-interface IProps extends NavigationInjectedProps {
+export interface IProps extends NavigationInjectedProps {
   token: string;
   dispatchSetToken: (token: string) => void;
 }
@@ -61,7 +61,9 @@ const webViewSrc = { uri: config.OAUTH_URL };
 const StyledSafeAreaView = styled(SafeAreaView)`
   flex: 1;
 `;
+StyledSafeAreaView.displayName = 'styled(SafeAreaView)';
 
 const StyledWebView = styled(WebView)`
   flex: 1;
 `;
+StyledWebView.displayName = 'styled(WebView)';
