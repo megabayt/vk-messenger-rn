@@ -41,8 +41,8 @@ export interface IChatsResponse {
   groups: ReadonlyArray<IChatGroup>;
 }
 
-export interface IChatMergedProfiles {
-  keyNumber: IChatProfile | IChatGroup;
+export type IChatMergedProfiles = {
+  [keyNumber: number]: IChatProfile | IChatGroup;
 }
 export interface IChatProfile {
   id: number;

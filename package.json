@@ -9,7 +9,8 @@
     "tsc-lint": "tsc --noEmit -p tsconfig.json",
     "eslint": "eslint -c .eslintrc.js './src/**/*.{ts,tsx}'",
     "fix-eslint:staged": "eslint -c .eslintrc.js --fix",
-    "fix-eslint": "eslint -c .eslintrc.js './src/**/*.{ts,tsx}' --fix"
+    "fix-eslint": "eslint -c .eslintrc.js './src/**/*.{ts,tsx}' --fix",
+    "coverage": "jest --coverage; open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html"
   },
   "husky": {
     "hooks": {

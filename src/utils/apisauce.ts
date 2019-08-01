@@ -1,4 +1,10 @@
-import { ApiErrorResponse, ApiResponse, ApisauceInstance, create } from 'apisauce';
+import {
+  ApiErrorResponse,
+  ApiResponse,
+  ApisauceInstance,
+  create,
+  RequestTransform,
+} from 'apisauce';
 import { config } from '@/constants/api';
 import { serialize } from '@/utils/helpers';
 import { IChatsParams, IChatsResponse } from '@/store/actions/chat.actions';
@@ -15,12 +21,26 @@ export const createApisauceService = (): IApisauceService => {
     timeout: config.TIMEOUT,
   });
 
+  api.addRequestTransform((request): void => {
+    request.url += `&v=${config.VERSION}`;
+  });
+
+  const setToken = (token: string): void => {
+    api.requestTransforms = api.requestTransforms.filter(item => item.name !== 'appendToken');
+    const appendToken: RequestTransform = (request): void => {
+      request.url += `&access_token=${token}`;
+    };
+    api.addRequestTransform(appendToken);
+  };
+
   return {
+    setToken,
     getConversations: (params) =>
       api.get(`/messages.getConversations?extended=1${serialize(params)}`),
   };
 };
 export type IApisauceService = {
+  setToken: (token: string) => void;
   getConversations: (params: IChatsParams) => Promise<ApiResponse<ICommonResponse<IChatsResponse>>>;
 };
 

@@ -64,3 +64,6 @@ buck-out/
 
 # config files
 src/constants/api.ts
+
+#jest
+coverage/

@@ -21,7 +21,7 @@ export const LoginPageComponent = ({
 }: IProps): React.ReactElement => {
   useEffect(() => {
     if (token !== '') {
-      navigation.navigate('MainSwitch');
+      navigation.navigate('Main');
     }
   }, [token, navigation]);
 
