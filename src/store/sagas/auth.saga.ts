@@ -10,7 +10,7 @@ export const setTokenSaga = (function (api, action) {
   api.setToken(action.payload || '');
 } as (api: IApisauceService, action: IAuthAction) => SagaIterator);
 
-export const watchChat = (function* (api) {
+export const watchAuth = (function* (api) {
   yield takeLatest(AuthActionTypes.SetToken, setTokenSaga, api);
   yield takeLatest(AuthActionTypes.UnsetToken, setTokenSaga, api);
 } as (api: IApisauceService) => SagaIterator);

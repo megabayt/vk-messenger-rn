@@ -25,13 +25,7 @@ export const createApisauceService = (): IApisauceService => {
     request.url += `&v=${config.VERSION}`;
   });
 
-  const setToken = (token: string): void => {
-    api.requestTransforms = api.requestTransforms.filter(item => item.name !== 'appendToken');
-    const appendToken: RequestTransform = (request): void => {
-      request.url += `&access_token=${token}`;
-    };
-    api.addRequestTransform(appendToken);
-  };
+  const setToken = setTokenFactory(api);
 
   return {
     setToken,
@@ -39,11 +33,19 @@ export const createApisauceService = (): IApisauceService => {
       api.get(`/messages.getConversations?extended=1${serialize(params)}`),
   };
 };
+
+export const setTokenFactory = (api: ApisauceInstance) => (token: string): void => {
+  api.requestTransforms = api.requestTransforms.filter(item => item.name !== 'appendToken');
+  const appendToken: RequestTransform = (request): void => {
+    request.url += `&access_token=${token}`;
+  };
+  api.addRequestTransform(appendToken);
+};
+
 export type IApisauceService = {
   setToken: (token: string) => void;
   getConversations: (params: IChatsParams) => Promise<ApiResponse<ICommonResponse<IChatsResponse>>>;
 };
-
 
 export interface ICommonOkResponse<T> {
   response: T;
