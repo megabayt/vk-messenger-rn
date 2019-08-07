@@ -14,7 +14,6 @@ const getChats = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
 export const getChatProfiles = createSelector(
   [getChats],
   (data: ICommonResponse<IChatsResponse> | null): IChatMergedProfiles => {
-    return {};
     const getProfiles = path(['response', 'profiles']);
     const getGroups = path(['response', 'groups']);
     // get an array of profiles and groups
@@ -29,7 +28,10 @@ export const getChatProfiles = createSelector(
         return result;
       }, {});
 
-    return (pipe(getArray, getProfilesReduce) as any)(data) || {};
+    // TODO: Разобраться, почему тс ворчит по поводу количества аргументов,
+    //  несмотря на то, что все работает
+    // @ts-ignore
+    return data ? pipe(getArray, getProfilesReduce)(data) : [];
   },
 );
 

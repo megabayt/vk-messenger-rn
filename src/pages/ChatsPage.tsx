@@ -19,14 +19,11 @@ export interface IProps {
 }
 
 export const ChatsPageComponent = ({
-  profiles,
-  chats,
   chatsFetch,
 }: IProps): React.ReactElement => {
   useEffect(() => {
     chatsFetch();
   }, []);
-  console.warn(profiles, chats);
   return (
     <View />
   );
