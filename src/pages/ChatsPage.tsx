@@ -5,9 +5,13 @@ import { withNavigation } from 'react-navigation';
 import { useEffect } from 'react';
 import { IStateUnion } from '@/store/reducers';
 import { getChatProfiles, getConversations } from '@/store/selectors/chat.selectors';
-import { chatsFetch as chatsFetchAction, IChatItem, IChatMergedProfiles } from '@/store/actions/chat.actions';
+import {
+  chatsFetch as chatsFetchAction,
+  IChatItem,
+  IChatMergedProfiles,
+} from '@/store/actions/chat.actions';
 
-interface IProps {
+export interface IProps {
   profiles: IChatMergedProfiles;
   chats: ReadonlyArray<IChatItem>;
 
@@ -19,9 +23,10 @@ export const ChatsPageComponent = ({
   chats,
   chatsFetch,
 }: IProps): React.ReactElement => {
-  // useEffect(() => {
-  //   chatsFetch();
-  // }, []);
+  useEffect(() => {
+    chatsFetch();
+  }, []);
+  console.warn(profiles, chats);
   return (
     <View />
   );

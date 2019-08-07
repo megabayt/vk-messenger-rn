@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { pipe, concat, reduce, converge, path, when } from 'ramda';
+import { pipe, concat, reduce, converge, path } from 'ramda';
 import {
   IChatGroup, IChatItem,
   IChatMergedProfiles,
@@ -14,7 +14,6 @@ const getChats = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
 export const getChatProfiles = createSelector(
   [getChats],
   (data: ICommonResponse<IChatsResponse> | null): IChatMergedProfiles => {
-    console.log(data);
     return {};
     const getProfiles = path(['response', 'profiles']);
     const getGroups = path(['response', 'groups']);
