@@ -2,7 +2,7 @@ import React from 'react';
 import { path } from 'ramda';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { IProps, ChatItemComponent } from '@/components/ChatItem';
-import conversations from '@/__mocks__/json/getConversations.json';
+import { conversations } from '@/__mocks__/responses/getConversations';
 import {
   getChatProfilesCombiner,
   getConversationsCombiner,
@@ -11,8 +11,8 @@ import {
 describe('ChatItem component', () => {
   let wrapper: ShallowWrapper;
   let props: IProps = {
-    chatItem: getConversationsCombiner(conversations as any)[0],
-    chatProfiles: getChatProfilesCombiner(conversations as any),
+    chatItem: getConversationsCombiner(conversations)[0],
+    chatProfiles: getChatProfilesCombiner(conversations),
   };
   describe('avatars', () => {
     it('should render avatar if single conversation', () => {
@@ -21,8 +21,8 @@ describe('ChatItem component', () => {
     });
     it('should render 4 avatars if group chat', () => {
       props = {
-        chatItem: getConversationsCombiner(conversations as any)[1],
-        chatProfiles: getChatProfilesCombiner(conversations as any),
+        chatItem: getConversationsCombiner(conversations)[1],
+        chatProfiles: getChatProfilesCombiner(conversations),
       };
       const activeIds: ReadonlyArray<number> =
         path(['chatItem', 'conversation', 'chat_settings', 'active_ids'], props) || [];
