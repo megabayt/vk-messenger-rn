@@ -8,8 +8,8 @@ import { stepper } from '@/utils/tests';
 describe('Chat sagas', () => {
   beforeEach(() => {
     // @ts-ignore
-    apisauceMock.setToken.mockClear()
-  })
+    apisauceMock.setToken.mockClear();
+  });
   it('should set token', async () => {
     const action = setToken('token');
 
