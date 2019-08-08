@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from 'react-navigation';
 
-import { ChatsPageContainer } from '@/pages/ChatsPage';
+import { ChatsPageContainer } from '@/pages/ChatsPage/ChatsPage';
 import { ProfilePageContainer } from '@/pages/ProfilePage';
 
 export const MainTabNavigator = createBottomTabNavigator(

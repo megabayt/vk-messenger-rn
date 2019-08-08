@@ -9,10 +9,10 @@ import {
 import { IStateUnion } from '@/store/reducers';
 import { ICommonResponse } from '@/utils/apisauce';
 
-const getChats = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
+const getChatsSelector = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
   path(['chat', 'chats', 'data'], state) || null;
-export const getChatProfiles = createSelector(
-  [getChats],
+
+export const getChatProfilesCombiner =
   (data: ICommonResponse<IChatsResponse> | null): IChatMergedProfiles => {
     const getProfiles = path(['response', 'profiles']);
     const getGroups = path(['response', 'groups']);
@@ -32,12 +32,19 @@ export const getChatProfiles = createSelector(
     //  несмотря на то, что все работает
     // @ts-ignore
     return data ? pipe(getArray, getProfilesReduce)(data) : [];
-  },
+  };
+
+export const getChatProfilesSelector = createSelector(
+  [getChatsSelector],
+  getChatProfilesCombiner,
 );
 
-export const getConversations = createSelector(
-  [getChats],
+export const getConversationsCombiner =
   (data: ICommonResponse<IChatsResponse> | null): ReadonlyArray<IChatItem> => {
     return path(['response', 'items'], data) || [];
-  },
+  };
+
+export const getConversationsSelector = createSelector(
+  [getChatsSelector],
+  getConversationsCombiner,
 );

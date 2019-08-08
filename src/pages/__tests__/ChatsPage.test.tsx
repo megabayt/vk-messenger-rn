@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import { ChatsPageComponent, IProps } from '@/pages/ChatsPage';
+import { ChatsPageComponent } from '@/pages/ChatsPage';
+import { IProps } from '@/pages/ChatsPage/ChatsPage';
 
 describe('Chats page', () => {
   let wrapper: ShallowWrapper;

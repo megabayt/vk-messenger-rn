@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import { useEffect } from 'react';
 import { IStateUnion } from '@/store/reducers';
-import { getChatProfiles, getConversations } from '@/store/selectors/chat.selectors';
+import {
+  getChatProfilesSelector,
+  getConversationsSelector,
+} from '@/store/selectors/chat.selectors';
 import {
   chatsFetch as chatsFetchAction,
   IChatItem,
@@ -31,8 +34,8 @@ export const ChatsPageComponent = ({
 
 export const ChatsPageContainer = connect(
   (state: IStateUnion) => ({
-    profiles: getChatProfiles(state),
-    chats: getConversations(state),
+    profiles: getChatProfilesSelector(state),
+    chats: getConversationsSelector(state),
   }),
   {
     chatsFetch: chatsFetchAction,
