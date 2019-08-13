@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 import { pipe, concat, reduce, converge, path } from 'ramda';
 import {
-  IChatGroup, IChatItem,
+  IChatGroup,
+  IChatItem,
   IChatMergedProfiles,
   IChatProfile,
   IChatsResponse,

@@ -1,8 +1,18 @@
 import { getChatProfilesCombiner, getConversationsCombiner } from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';
+import {IStateUnion} from "@/store/reducers";
 
 describe('chat selectors', () => {
+  const state: Partial<IStateUnion> = {
+    chat: {
+      chats: {
+        fetching: false,
+        error: false,
+        data: conversations,
+      },
+    },
+  };
   it('should get chats', () => {
     const chats = getConversationsCombiner(conversations);
     // @ts-ignore

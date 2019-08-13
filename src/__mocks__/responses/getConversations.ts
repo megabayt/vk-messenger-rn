@@ -1,7 +1,8 @@
-import camelcaseKeys from 'camelcase-keys';
-
 /* eslint-disable @typescript-eslint/camelcase */
-export const conversations: any = camelcaseKeys({
+import { ICommonResponse } from '@/utils/apisauce';
+import { IChatsResponse } from '@/store/actions/chat.actions';
+
+export const conversations: ICommonResponse<IChatsResponse> = {
   response: {
     count: 307,
     items: [
@@ -126,4 +127,4 @@ export const conversations: any = camelcaseKeys({
       },
     ],
   },
-}, { deep: true });
+};

@@ -1,6 +1,5 @@
 import { Action } from 'redux';
 import { ICommonResponse } from '@/utils/apisauce';
-import { IAttachment } from '@/interfaces';
 
 export enum ChatActionTypes {
   ChatsFetch = 'CHATS_FETCH',
@@ -29,9 +28,9 @@ export type IChatsParams = {
   filter: 'all' | 'unread' | 'important' | 'unanswered';
   extended: number;
   bool: number;
-  startMessageId: number;
+  start_message_id: number;
   fields: string;
-  groupId: number;
+  group_id: number;
 }
 
 export interface IChatsResponse {
@@ -41,90 +40,119 @@ export interface IChatsResponse {
   groups: ReadonlyArray<IChatGroup>;
 }
 
-export type IChatMergedProfiles = {
-  [keyNumber: number]: IChatProfile | IChatGroup;
-}
-export interface IChatProfile {
-  id: number;
-  firstName: string;
-  lastName: string;
-  isClosed: boolean;
-  canAccessClosed: boolean;
-  sex: number;
-  screenName: string;
-  photo50: string;
-  photo100: string;
-  online: number;
-  onlineApp: string;
-  onlineMobile: number;
-
-}
 export interface IChatGroup {
   id: number;
   name: string;
-  screenName: string;
-  isClosed: number;
+  screen_name: string;
+  is_closed: number;
   type: string;
-  isAdmin: number;
-  isMember: number;
-  isAdvertiser: number;
-  photo50: string;
-  photo100: string;
-  photo200: string;
-  adminLevel: number;
-}
-export interface IChatItem {
-  conversation: {
-    peer: {
-      id: number;
-      type: 'user' | 'chat' | 'group' | 'email';
-      localId: number;
-    };
-    inRead: number;
-    outRead: number;
-    lastMessageId: number;
-    canWrite: {
-      allowed: boolean;
-    };
-    chatSettings: {
-      title: string;
-      membersCount: number;
-      state: string;
-      activeIds: ReadonlyArray<number>;
-      acl: {
-        canInvite: boolean;
-        canChangeInfo: boolean;
-        canChangePin: boolean;
-        canPromoteUsers: boolean;
-        canSeeInviteLink: boolean;
-        canChangeInviteLink: boolean;
-      };
-      isGroupChannel: boolean;
-      ownerId: number;
-    };
-  };
-  lastMessage: {
-    date: number;
-    fromId: number;
-    id: number;
-    out: number;
-    peerId: number;
-    text: string;
-    conversationMessageId: number;
-    fwdMessages: ReadonlyArray<IChatFwdmessage>;
-    important: boolean;
-    randomId: number;
-    attachments: ReadonlyArray<IAttachment>;
-    isHidden: boolean;
-  };
+  is_admin: number;
+  is_member: number;
+  is_advertiser: number;
+  photo_50: string;
+  photo_100: string;
+  photo_200: string;
 }
 
-interface IChatFwdmessage {
+export interface IChatProfile {
+  id: number;
+  first_name: string;
+  last_name: string;
+  is_closed: boolean;
+  can_access_closed: boolean;
+  sex: number;
+  screen_name: string;
+  photo_50: string;
+  photo_100: string;
+  online: number;
+}
+
+export type IChatMergedProfiles = {
+  [keyNumber: number]: IChatProfile | IChatGroup;
+}
+
+export interface IChatItem {
+  conversation: IConversation;
+  last_message: ILastmessage;
+}
+
+interface ILastmessage {
   date: number;
   from_id: number;
-  text: string;
-  attachments: ReadonlyArray<IAttachment>;
-  conversation_message_id: number;
-  peer_id: number;
   id: number;
+  out: number;
+  peer_id: number;
+  text: string;
+  conversation_message_id: number;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fwd_messages: Array<any>;
+  important: boolean;
+  random_id: number;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  attachments: Array<any>;
+  is_hidden: boolean;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action?: any;
+}
+
+interface IConversation {
+  peer: IPeer;
+  in_read: number;
+  out_read: number;
+  last_message_id: number;
+  can_write: ICanwrite;
+  current_keyboard?: ICurrentkeyboard;
+  chat_settings?: IChatsettings;
+}
+
+interface IChatsettings {
+  owner_id: number;
+  title: string;
+  state: string;
+  acl: IAcl;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  active_ids: Array<any>;
+}
+
+interface IAcl {
+  can_change_info: boolean;
+  can_change_invite_link: boolean;
+  can_change_pin: boolean;
+  can_invite: boolean;
+  can_promote_users: boolean;
+  can_see_invite_link: boolean;
+  can_moderate: boolean;
+}
+
+
+interface ICurrentkeyboard {
+  one_time: boolean;
+  author_id: number;
+  buttons: Array<Array<IButton>>;
+}
+
+interface IButton {
+  action: IButtonAction;
+  color: string;
+}
+
+interface IButtonAction {
+  type: string;
+  label: string;
+  payload: string;
+}
+
+interface ICanwrite {
+  allowed: boolean;
+  reason?: number;
+}
+
+interface IPeer {
+  id: number;
+  type: string;
+  local_id: number;
 }
