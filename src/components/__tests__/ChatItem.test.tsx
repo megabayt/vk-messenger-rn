@@ -19,7 +19,7 @@ describe('ChatItem component', () => {
       wrapper = shallow(<ChatItemComponent {...props}/>);
       expect(wrapper.find('Image')).toHaveLength(1);
     });
-    it('should render 4 avatars if group chat', () => {
+    it('should render as many avatars as there are chat users, but no more than 4', () => {
       props = {
         chatItem: getConversationsCombiner(conversations)[1],
         chatProfiles: getChatProfilesCombiner(conversations),
@@ -27,7 +27,8 @@ describe('ChatItem component', () => {
       const activeIds: ReadonlyArray<number> =
         path(['chatItem', 'conversation', 'chat_settings', 'active_ids'], props) || [];
       wrapper = shallow(<ChatItemComponent {...props}/>);
-      expect(wrapper.find('Image')).toHaveLength(activeIds.length);
+      expect(wrapper.find('Image'))
+        .toHaveLength(activeIds.length > 4 ? 4 : activeIds.length);
     });
   });
   describe('other fields', () => {

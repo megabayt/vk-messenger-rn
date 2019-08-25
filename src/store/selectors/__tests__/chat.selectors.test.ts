@@ -1,7 +1,7 @@
 import { getChatProfilesCombiner, getConversationsCombiner } from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';
-import {IStateUnion} from "@/store/reducers";
+import { IStateUnion } from '@/store/reducers';
 
 describe('chat selectors', () => {
   const state: Partial<IStateUnion> = {
