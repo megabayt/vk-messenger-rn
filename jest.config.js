@@ -27,7 +27,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     // eslint-disable-next-line
-    'node_modules/(?!react-native|react-native-vector-icons)',
+    'node_modules/(?!react-native|react-native-vector-icons|material-bread)',
   ],
   setupFiles: [
     './setupTests.js',

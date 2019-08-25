@@ -1,8 +1,15 @@
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  RefreshControl,
+  SafeAreaView,
+  Text,
+} from 'react-native';
 import { connect } from 'react-redux';
-import { SafeAreaView, Text } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import { useEffect } from 'react';
+import { ProgressBar } from 'material-bread';
+
 import { IStateUnion } from '@/store/reducers';
 import {
   getConversationsSelector,
@@ -29,18 +36,38 @@ export const ChatsPageComponent = ({
 }: IProps): React.ReactElement => {
   useEffect(() => {
     chatsFetch();
-  }, []);
-  if (fetching) {
-    return (<Text testID="fetching">Загрузка</Text>);
-  }
-  if (error) {
-    return (<Text testID="error">Ошибка</Text>);
-  }
+  }, [chatsFetch]);
+  const keyExtractor = useCallback((chat: IChatItem) => String(chat.conversation.peer.id), []);
+  const renderItem = useCallback((info: ListRenderItemInfo<IChatItem>) => (
+    <ChatItemContainer
+      testID="item"
+      chat={info.item}
+    />
+  ), []);
+
   return (
     <SafeAreaView>
-      {chats.map((chat, i) => (
-        <ChatItemContainer testID="item" key={i} chat={chat}  />
-      ))}
+      <ProgressBar
+        testID="fetching"
+        visible={fetching}
+      />
+      {!error
+        ? (
+          <FlatList
+            data={chats}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl
+                refreshing={false}
+                onRefresh={chatsFetch}
+              />
+            }
+          />
+        )
+        : (
+          <Text testID="error">An error has occurred</Text>
+        )}
     </SafeAreaView>
   );
 };

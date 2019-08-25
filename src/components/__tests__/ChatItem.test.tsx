@@ -11,23 +11,25 @@ import {
 describe('ChatItem component', () => {
   let wrapper: ShallowWrapper;
   let props: IProps = {
-    chatItem: getConversationsCombiner(conversations)[0],
-    chatProfiles: getChatProfilesCombiner(conversations),
+    chat: getConversationsCombiner(conversations)[0],
+    profiles: getChatProfilesCombiner(conversations),
   };
   describe('avatars', () => {
     it('should render avatar if single conversation', () => {
       wrapper = shallow(<ChatItemComponent {...props}/>);
-      expect(wrapper.find('Image')).toHaveLength(1);
+      const el = wrapper.findWhere(node => node.prop('testID') === 'avatar');
+      expect(el).toHaveLength(1);
     });
     it('should render as many avatars as there are chat users, but no more than 4', () => {
       props = {
-        chatItem: getConversationsCombiner(conversations)[1],
-        chatProfiles: getChatProfilesCombiner(conversations),
+        chat: getConversationsCombiner(conversations)[1],
+        profiles: getChatProfilesCombiner(conversations),
       };
       const activeIds: ReadonlyArray<number> =
-        path(['chatItem', 'conversation', 'chat_settings', 'active_ids'], props) || [];
+        path(['chat', 'conversation', 'chat_settings', 'active_ids'], props) || [];
       wrapper = shallow(<ChatItemComponent {...props}/>);
-      expect(wrapper.find('Image'))
+      const el = wrapper.findWhere(node => node.prop('testID') === 'avatar');
+      expect(el)
         .toHaveLength(activeIds.length > 4 ? 4 : activeIds.length);
     });
   });
@@ -35,17 +37,13 @@ describe('ChatItem component', () => {
     beforeAll(() => {
       wrapper = shallow(<ChatItemComponent {...props}/>);
     });
-    it('should render fullname', () => {
-      const el = wrapper.findWhere(node => node.prop('testID') === 'fullname');
+    it('should render list item', () => {
+      const el = wrapper.findWhere(node => node.prop('testID') === 'list-item');
       expect(el).toHaveLength(1);
-      expect(el.children().text()).toBe('asd');
+      expect(el.prop('text')).toBe('Гугл музыка');
+      expect(el.prop('secondaryText')).toBe('Вложение');
     });
-    it('should render last message text and date', () => {
-      const el = wrapper.findWhere(node => node.prop('testID') === 'date');
-      expect(el).toHaveLength(1);
-      expect(el.children().text()).toBe('11.11.2000');
-    });
-    it('should render badge with unread ', () => {
+    it('should render badge with unread', () => {
       const el = wrapper.findWhere(node => node.prop('testID') === 'unread');
       expect(el).toHaveLength(1);
       expect(el.children().text()).toBe('1');

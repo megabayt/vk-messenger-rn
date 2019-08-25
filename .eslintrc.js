@@ -3,6 +3,7 @@ module.exports = {
     plugins: [
         'react',
         'import',
+        'react-hooks',
         '@typescript-eslint',
     ],
     extends: [
@@ -37,6 +38,7 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
         '@typescript-eslint/indent': ["error", 2],
+        '@typescript-eslint/camelcase': 'off',
 
 
         /** COMMON RULES */
@@ -61,6 +63,9 @@ module.exports = {
 
         "import/no-default-export": "error",
         "import/order": "warn",
+
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
     },
     settings: {
         react: {

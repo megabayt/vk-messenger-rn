@@ -106,6 +106,7 @@ interface IConversation {
   can_write: ICanwrite;
   current_keyboard?: ICurrentkeyboard;
   chat_settings?: IChatsettings;
+  unread_count?: number;
 }
 
 interface IChatsettings {

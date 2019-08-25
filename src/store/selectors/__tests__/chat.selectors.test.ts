@@ -20,7 +20,7 @@ describe('chat selectors', () => {
   });
   it('should generate array of profiles', () => {
     const profiles = getChatProfilesCombiner(conversations);
-    /* eslint-disable @typescript-eslint/camelcase, quote-props */
+    /* eslint-disable quote-props */
     expect(profiles).toEqual( {
       '1': { id: 1,
         first_name: 'Иван',
@@ -55,5 +55,5 @@ describe('chat selectors', () => {
           photo_100: 'https://unsplash.it/500/500?random',
           photo_200: 'https://unsplash.it/500/500?random1' } });
   });
-  /* eslint-enable @typescript-eslint/camelcase, quote-props */
+  /* eslint-enable quote-props */
 });

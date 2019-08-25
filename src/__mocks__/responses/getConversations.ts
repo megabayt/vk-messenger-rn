@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { ICommonResponse } from '@/utils/apisauce';
 import { IChatsResponse } from '@/store/actions/chat.actions';
 
@@ -19,6 +18,7 @@ export const conversations: ICommonResponse<IChatsResponse> = {
           can_write: {
             allowed: true,
           },
+          unread_count: 1,
         },
         last_message: {
           date: 1565255931,
