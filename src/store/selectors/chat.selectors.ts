@@ -8,16 +8,16 @@ import {
   IChatsResponse,
 } from '@/store/actions/chat.actions';
 import { IStateUnion } from '@/store/reducers';
-import { ICommonResponse } from '@/utils/apisauce';
+import { ICommonOkResponse } from '@/utils/apisauce';
 
-const getChatsSelector = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
+export const getChatsSelector = (state: IStateUnion): ICommonOkResponse<IChatsResponse> | null =>
   path(['chat', 'chats', 'data'], state) || null;
 
 export const getChatsCountSelector = (state: IStateUnion): number =>
   path(['chat', 'chats', 'data', 'response', 'count'], state) || 0;
 
 export const getChatProfilesCombiner =
-  (data: ICommonResponse<IChatsResponse> | null): IChatMergedProfiles => {
+  (data: ICommonOkResponse<IChatsResponse> | null): IChatMergedProfiles => {
     const getProfiles = path(['response', 'profiles']);
     const getGroups = path(['response', 'groups']);
     // get an array of profiles and groups
@@ -44,7 +44,7 @@ export const getChatProfilesSelector = createSelector(
 );
 
 export const getConversationsCombiner =
-  (data: ICommonResponse<IChatsResponse> | null): ReadonlyArray<IChatItem> => {
+  (data: ICommonOkResponse<IChatsResponse> | null): ReadonlyArray<IChatItem> => {
     return path(['response', 'items'], data) || [];
   };
 

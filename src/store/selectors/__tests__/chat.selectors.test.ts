@@ -1,4 +1,9 @@
-import { getChatProfilesCombiner, getConversationsCombiner } from '../chat.selectors';
+import {
+  getChatProfilesCombiner,
+  getChatsCountSelector,
+  getChatsSelector,
+  getConversationsCombiner
+} from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';
 import { IStateUnion } from '@/store/reducers';
@@ -13,10 +18,20 @@ describe('chat selectors', () => {
       },
     },
   };
-  it('should get chats', () => {
-    const chats = getConversationsCombiner(conversations);
+  it('should get Chats', () => {
+    const chats = getChatsSelector(state as any);
     // @ts-ignore
-    expect(chats).toEqual(state.chat.chats.data.response.items);
+    expect(chats).toEqual(state.chat.chats);
+  });
+  it('should get ChatsCount', () => {
+    const chats = getChatsCountSelector(state as any);
+    // @ts-ignore
+    expect(chats).toEqual(state.chat.chats.data.response.count);
+  });
+  it('should get conversations', () => {
+    const conv = getConversationsCombiner(conversations);
+    // @ts-ignore
+    expect(conv).toEqual(state.chat.chats.data.response.items);
   });
   it('should generate array of profiles', () => {
     const profiles = getChatProfilesCombiner(conversations);

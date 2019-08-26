@@ -2,7 +2,12 @@ import { SagaIterator } from 'redux-saga';
 import { takeLatest, call, put } from 'redux-saga/effects';
 
 import { ApiResponse } from 'apisauce';
-import { IApisauceService, ICommonOkResponse, ICommonResponse } from '@/utils/apisauce';
+import {
+  IApisauceService,
+  ICommonErrorResponse,
+  ICommonOkResponse,
+  ICommonResponse,
+} from '@/utils/apisauce';
 import {
   ChatActionTypes,
   chatsSet,
@@ -20,7 +25,7 @@ export const chatsFetchSaga = (function* (api, action) {
   if (result.status === 200) {
     yield put(chatsSet(result.data as ICommonOkResponse<IChatsResponse>));
   } else {
-    yield put(chatsErrorSet(result.data as ICommonOkResponse<IChatsResponse>));
+    yield put(chatsErrorSet(result.data as ICommonErrorResponse<IChatsResponse>));
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 
@@ -30,7 +35,7 @@ export const chatsAppendFetchSaga = (function* (api, action) {
   if (result.status === 200) {
     yield put(chatsAppendSet(result.data as ICommonOkResponse<IChatsResponse>));
   } else {
-    yield put(chatsAppendErrorSet(result.data as ICommonOkResponse<IChatsResponse>));
+    yield put(chatsAppendErrorSet(result.data as ICommonErrorResponse<IChatsResponse>));
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 

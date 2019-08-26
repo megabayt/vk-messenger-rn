@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { ICommonResponse } from '@/utils/apisauce';
+import { ICommonErrorResponse, ICommonOkResponse, ICommonResponse } from '@/utils/apisauce';
 
 export enum ChatActionTypes {
   ChatsFetch = 'CHATS_FETCH',
@@ -15,12 +15,12 @@ export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
   payload: params,
 });
 
-export const chatsErrorSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+export const chatsErrorSet = (data: ICommonErrorResponse<IChatsResponse>): IChatAction => ({
   type: ChatActionTypes.ChatsErrorSet,
   payload: data,
 });
 
-export const chatsSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+export const chatsSet = (data: ICommonOkResponse<IChatsResponse>): IChatAction => ({
   type: ChatActionTypes.ChatsSet,
   payload: data,
 });
@@ -31,20 +31,18 @@ export const chatsAppendFetch = (params?: Partial<IChatsParams>): IChatAction =>
   payload: params,
 });
 
-export const chatsAppendErrorSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+export const chatsAppendErrorSet = (data: ICommonErrorResponse<IChatsResponse>): IChatAction => ({
   type: ChatActionTypes.ChatsAppendErrorSet,
   payload: data,
 });
 
-export const chatsAppendSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+export const chatsAppendSet = (data: ICommonOkResponse<IChatsResponse>): IChatAction => ({
   type: ChatActionTypes.ChatsAppendSet,
   payload: data,
 });
 
 export interface IChatAction extends Action<ChatActionTypes> {
-  payload?:
-  Partial<IChatsParams>
-  | ICommonResponse<IChatsResponse>;
+  payload?: Partial<IChatsParams> | ICommonResponse<IChatsResponse>;
 }
 
 export type IChatsParams = {
