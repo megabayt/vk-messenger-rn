@@ -6,7 +6,7 @@ describe('chat reducer', () => {
   it('should set fetch flag', () => {
     const state = chatReducer(initialChatState, chatsFetch());
     expect(state.chats.fetching).toBe(true);
-    expect(state.chats.error).toBe(false);
+    expect(state.chats.error).toBe(null);
     expect(state.chats.data).toBe(null);
   });
 
@@ -21,7 +21,7 @@ describe('chat reducer', () => {
     };
     const state = chatReducer(initialChatState, chatsSet(data));
     expect(state.chats.fetching).toBe(false);
-    expect(state.chats.error).toBe(false);
+    expect(state.chats.error).toBe(null);
     expect(state.chats.data).toBe(data);
   });
 });

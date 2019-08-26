@@ -8,7 +8,7 @@ describe('chat selectors', () => {
     chat: {
       chats: {
         fetching: false,
-        error: false,
+        error: null,
         data: conversations,
       },
     },

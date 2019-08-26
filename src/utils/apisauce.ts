@@ -44,7 +44,9 @@ export const setTokenFactory = (api: ApisauceInstance) => (token: string): void 
 
 export type IApisauceService = {
   setToken: (token: string) => void;
-  getConversations: (params: IChatsParams) => Promise<ApiResponse<ICommonResponse<IChatsResponse>>>;
+  getConversations: (
+    params: IChatsParams
+  ) => Promise<ApiResponse<ICommonResponse<IChatsResponse, IChatsParams>>>;
 };
 
 export interface ICommonOkResponse<T> {

@@ -1,7 +1,7 @@
-import { ICommonResponse } from '@/utils/apisauce';
+import { ICommonOkResponse } from '@/utils/apisauce';
 import { IChatsResponse } from '@/store/actions/chat.actions';
 
-export const conversations: ICommonResponse<IChatsResponse> = {
+export const conversations: ICommonOkResponse<IChatsResponse> = {
   response: {
     count: 307,
     items: [

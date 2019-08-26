@@ -7,6 +7,8 @@ import {
   ChatActionTypes,
   chatsSet,
   chatsAppendSet,
+  chatsErrorSet,
+  chatsAppendErrorSet,
   IChatAction,
   IChatsParams,
   IChatsResponse,
@@ -17,6 +19,8 @@ export const chatsFetchSaga = (function* (api, action) {
     yield call(api.getConversations, (action.payload as IChatsParams));
   if (result.status === 200) {
     yield put(chatsSet(result.data as ICommonOkResponse<IChatsResponse>));
+  } else {
+    yield put(chatsErrorSet(result.data as ICommonOkResponse<IChatsResponse>));
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 
@@ -25,6 +29,8 @@ export const chatsAppendFetchSaga = (function* (api, action) {
     yield call(api.getConversations, (action.payload as IChatsParams));
   if (result.status === 200) {
     yield put(chatsAppendSet(result.data as ICommonOkResponse<IChatsResponse>));
+  } else {
+    yield put(chatsAppendErrorSet(result.data as ICommonOkResponse<IChatsResponse>));
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 

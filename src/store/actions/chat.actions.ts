@@ -3,8 +3,10 @@ import { ICommonResponse } from '@/utils/apisauce';
 
 export enum ChatActionTypes {
   ChatsFetch = 'CHATS_FETCH',
+  ChatsErrorSet = 'CHATS_ERROR_SET',
   ChatsSet = 'CHATS_SET',
   ChatsAppendFetch = 'CHATS_APPEND_FETCH',
+  ChatsAppendErrorSet = 'CHATS_APPEND_ERROR_SET',
   ChatsAppendSet = 'CHATS_APPEND_SET',
 }
 
@@ -13,14 +15,25 @@ export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
   payload: params,
 });
 
+export const chatsErrorSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+  type: ChatActionTypes.ChatsErrorSet,
+  payload: data,
+});
+
 export const chatsSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
   type: ChatActionTypes.ChatsSet,
   payload: data,
 });
 
+
 export const chatsAppendFetch = (params?: Partial<IChatsParams>): IChatAction => ({
   type: ChatActionTypes.ChatsAppendFetch,
   payload: params,
+});
+
+export const chatsAppendErrorSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({
+  type: ChatActionTypes.ChatsAppendErrorSet,
+  payload: data,
 });
 
 export const chatsAppendSet = (data: ICommonResponse<IChatsResponse>): IChatAction => ({

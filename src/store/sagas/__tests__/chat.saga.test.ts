@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import {chatsAppendFetchSaga, chatsFetchSaga, watchChat} from '@/store/sagas/chat.saga';
+import { chatsAppendFetchSaga, chatsFetchSaga, watchChat } from '@/store/sagas/chat.saga';
 import { apisauceMock } from '@/__mocks__/apisauceMock';
 import {
   ChatActionTypes,
