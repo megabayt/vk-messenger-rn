@@ -7,7 +7,7 @@ import {
   chatsFetch, chatsSet, IChatsParams, IChatsResponse,
 } from '@/store/actions/chat.actions';
 import { stepper } from '@/utils/tests';
-import {ICommonErrorResponse, ICommonOkResponse, okResponse} from '@/utils/apisauce';
+import { ICommonErrorResponse, ICommonOkResponse, okResponse } from '@/utils/apisauce';
 
 describe('Chat sagas', () => {
   it('should fetch chats', async () => {

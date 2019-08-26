@@ -2,7 +2,7 @@ import {
   getChatProfilesCombiner,
   getChatsCountSelector,
   getChatsSelector,
-  getConversationsCombiner
+  getConversationsCombiner,
 } from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';

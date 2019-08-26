@@ -4,10 +4,10 @@ import {
   chatsAppendSet,
   chatsErrorSet,
   chatsFetch,
-  chatsSet
+  chatsSet,
 } from '@/store/actions/chat.actions';
 import { chatReducer, initialChatState } from '@/store/reducers/chat.reducer';
-import {conversations} from '@/__mocks__/responses/getConversations';
+import { conversations } from '@/__mocks__/responses/getConversations';
 
 describe('chat reducer', () => {
   it('should have initialState', () => {
