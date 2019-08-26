@@ -3,7 +3,7 @@ import { compose, lensPath, concat, view, set } from 'ramda';
 
 import {
   ChatActionTypes,
-  IChatAction,
+  IChatAction, IChatMessagesParams, IChatMessagesResponse,
   IChatsParams,
   IChatsResponse,
 } from '../actions/chat.actions';
@@ -15,9 +15,19 @@ export interface IChatState {
     readonly error: ICommonErrorResponse<IChatsParams> | null;
     readonly data: ICommonOkResponse<IChatsResponse> | null;
   };
+  readonly messages: {
+    readonly fetching: boolean;
+    readonly error: ICommonErrorResponse<IChatMessagesParams> | null;
+    readonly data: ICommonOkResponse<IChatMessagesResponse> | null;
+  };
 }
 export const initialChatState: IChatState = {
   chats: {
+    fetching: false,
+    error: null,
+    data: null,
+  },
+  messages: {
     fetching: false,
     error: null,
     data: null,
@@ -59,6 +69,43 @@ export const chatReducer: Reducer<IChatState, IChatAction> = (state = initialCha
           view(lensPayloadGroups, action.payload) || [],
         )) as (obj: IChatState) => IChatState,
       )(state);
+    case ChatActionTypes.ChatMessagesFetch:
+    case ChatActionTypes.ChatMessagesAppendFetch:
+      return compose(
+        set(lensStateChatMessagesFetching, true) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesError, null) as (obj: IChatState) => IChatState,
+      )(state);
+    case ChatActionTypes.ChatMessagesSet:
+      return compose(
+        set(lensStateChatMessagesFetching, false) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesData, action.payload) as (obj: IChatState) => IChatState,
+      )(state);
+    case ChatActionTypes.ChatMessagesErrorSet:
+    case ChatActionTypes.ChatMessagesAppendErrorSet:
+      return compose(
+        set(lensStateChatMessagesFetching, false) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesError, action.payload) as (obj: IChatState) => IChatState,
+      )(state);
+    case ChatActionTypes.ChatMessagesAppendSet:
+      return compose(
+        set(lensStateChatMessagesFetching, false) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesItems, concat(
+          view(lensStateChatMessagesItems, state) || [],
+          view(lensPayloadItems, action.payload) || [],
+        )) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesConversations, concat(
+          view(lensStateChatMessagesConversations, state) || [],
+          view(lensPayloadConversations, action.payload) || [],
+        )) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesProfiles, concat(
+          view(lensStateChatMessagesProfiles, state) || [],
+          view(lensPayloadProfiles, action.payload) || [],
+        )) as (obj: IChatState) => IChatState,
+        set(lensStateChatMessagesGroups, concat(
+          view(lensStateChatMessagesGroups, state) || [],
+          view(lensPayloadGroups, action.payload) || [],
+        )) as (obj: IChatState) => IChatState,
+      )(state);
     default:
       return state;
   }
@@ -76,3 +123,18 @@ const lensPayloadProfiles = lensPath(['response', 'profiles']);
 
 const lensStateChatsGroups = lensPath(['chats', 'data', 'response', 'groups']);
 const lensPayloadGroups = lensPath(['response', 'groups']);
+
+
+const lensStateChatMessagesFetching = lensPath(['messages', 'fetching']);
+const lensStateChatMessagesError = lensPath(['messages', 'error']);
+const lensStateChatMessagesData = lensPath(['messages', 'data']);
+
+const lensStateChatMessagesItems = lensPath(['messages', 'data', 'response', 'items']);
+
+const lensStateChatMessagesConversations =
+  lensPath(['messages', 'data', 'response', 'conversations']);
+const lensPayloadConversations = lensPath(['response', 'conversations']);
+
+const lensStateChatMessagesProfiles = lensPath(['messages', 'data', 'response', 'profiles']);
+
+const lensStateChatMessagesGroups = lensPath(['messages', 'data', 'response', 'groups']);

@@ -7,7 +7,7 @@ import {
 } from 'apisauce';
 import { config } from '@/constants/api';
 import { serialize } from '@/utils/helpers';
-import { IChatsParams, IChatsResponse } from '@/store/actions/chat.actions';
+import { IChatMessagesParams, IChatMessagesResponse, IChatsParams, IChatsResponse } from '@/store/actions/chat.actions';
 
 export const createApisauceService = (): IApisauceService => {
   const api: ApisauceInstance = create({
@@ -31,6 +31,8 @@ export const createApisauceService = (): IApisauceService => {
     setToken,
     getConversations: (params) =>
       api.get(`/messages.getConversations?extended=1${serialize(params)}`),
+    getHistory: (params) =>
+      api.get(`/messages.getConversations?extended=1${serialize(params)}`),
   };
 };
 
@@ -47,6 +49,9 @@ export type IApisauceService = {
   getConversations: (
     params: IChatsParams
   ) => Promise<ApiResponse<ICommonResponse<IChatsResponse, IChatsParams>>>;
+  getHistory: (
+    params: IChatMessagesParams
+  ) => Promise<ApiResponse<ICommonResponse<IChatMessagesResponse, IChatMessagesParams>>>;
 };
 
 export interface ICommonOkResponse<T> {

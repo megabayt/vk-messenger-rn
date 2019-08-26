@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from 'react-navigation';
 
-import { ChatsPageContainer } from '@/pages/ChatsPage/ChatsPage';
+import { ChatStackNavigator } from './ChatStackNavigator';
 import { ProfilePageContainer } from '@/pages/ProfilePage';
 
 export const MainTabNavigator = createBottomTabNavigator(
   {
-    Chats: ChatsPageContainer,
+    Chats: ChatStackNavigator,
     Profile: ProfilePageContainer,
   },
   {

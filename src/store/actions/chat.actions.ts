@@ -8,6 +8,13 @@ export enum ChatActionTypes {
   ChatsAppendFetch = 'CHATS_APPEND_FETCH',
   ChatsAppendErrorSet = 'CHATS_APPEND_ERROR_SET',
   ChatsAppendSet = 'CHATS_APPEND_SET',
+
+  ChatMessagesFetch = 'CHAT_MESSAGES_FETCH',
+  ChatMessagesErrorSet = 'CHAT_MESSAGES_ERROR_SET',
+  ChatMessagesSet = 'CHAT_MESSAGES_SET',
+  ChatMessagesAppendFetch = 'CHAT_MESSAGES_APPEND_FETCH',
+  ChatMessagesAppendErrorSet = 'CHAT_MESSAGES_APPEND_ERROR_SET',
+  ChatMessagesAppendSet = 'CHAT_MESSAGES_APPEND_SET',
 }
 
 export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
@@ -15,7 +22,7 @@ export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
   payload: params,
 });
 
-export const chatsErrorSet = (data: ICommonErrorResponse<IChatsResponse>): IChatAction => ({
+export const chatsErrorSet = (data: ICommonErrorResponse<IChatsParams>): IChatAction => ({
   type: ChatActionTypes.ChatsErrorSet,
   payload: data,
 });
@@ -31,7 +38,7 @@ export const chatsAppendFetch = (params?: Partial<IChatsParams>): IChatAction =>
   payload: params,
 });
 
-export const chatsAppendErrorSet = (data: ICommonErrorResponse<IChatsResponse>): IChatAction => ({
+export const chatsAppendErrorSet = (data: ICommonErrorResponse<IChatsParams>): IChatAction => ({
   type: ChatActionTypes.ChatsAppendErrorSet,
   payload: data,
 });
@@ -41,15 +48,56 @@ export const chatsAppendSet = (data: ICommonOkResponse<IChatsResponse>): IChatAc
   payload: data,
 });
 
+
+export const chatMessagesFetch = (params?: Partial<IChatMessagesParams>): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesFetch,
+  payload: params,
+});
+
+export const chatMessagesErrorSet = (
+  data: ICommonErrorResponse<IChatMessagesParams>
+): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesErrorSet,
+  payload: data,
+});
+
+export const chatMessagesSet = (data: ICommonOkResponse<IChatMessagesResponse>): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesSet,
+  payload: data,
+});
+
+
+export const chatMessagesAppendFetch = (params?: Partial<IChatMessagesParams>): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesAppendFetch,
+  payload: params,
+});
+
+export const chatMessagesAppendErrorSet = (
+  data: ICommonErrorResponse<IChatMessagesParams>
+): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesAppendErrorSet,
+  payload: data,
+});
+
+export const chatMessagesAppendSet = (
+  data: ICommonOkResponse<IChatMessagesResponse>
+): IChatAction => ({
+  type: ChatActionTypes.ChatMessagesAppendSet,
+  payload: data,
+});
+
 export interface IChatAction extends Action<ChatActionTypes> {
-  payload?: Partial<IChatsParams> | ICommonResponse<IChatsResponse>;
+  payload?: Partial<IChatsParams>
+  | ICommonResponse<IChatsResponse>
+  | Partial<IChatMessagesParams>
+  | ICommonResponse<IChatMessagesResponse>;
 }
 
 export type IChatsParams = {
   offset: number;
   count: number;
   filter: 'all' | 'unread' | 'important' | 'unanswered';
-  extended: number;
+  extended: 1 | 0;
   bool: number;
   start_message_id: number;
   fields: string;
@@ -179,4 +227,42 @@ interface IPeer {
   id: number;
   type: string;
   local_id: number;
+}
+
+export type IChatMessagesParams = {
+  offset: number;
+  count: number;
+  user_id: number;
+  peer_id: number;
+  start_message_id: number;
+  rev: 1 | 0;
+  fields: string;
+  group_id: number;
+  extended: 1 | 0;
+}
+export interface IChatMessagesResponse {
+  count: number;
+  items: Array<IMessageItem>;
+  conversations: Array<IConversation>;
+  profiles: Array<IChatProfile>;
+  groups: Array<IChatGroup>;
+}
+interface IMessageItem {
+  date: number;
+  from_id: number;
+  id: number;
+  out: number;
+  peer_id: number;
+  text: string;
+  conversation_message_id: number;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fwd_messages: Array<any>;
+  important: boolean;
+  random_id: number;
+  // TODO: Убрать any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  attachments: Array<any>;
+  is_hidden: boolean;
+  update_time?: number;
 }

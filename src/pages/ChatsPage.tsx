@@ -22,10 +22,11 @@ import {
   IChatItem, IChatsParams,
 } from '@/store/actions/chat.actions';
 import { ChatItemContainer } from '@/components/ChatItem';
+import { ICommonErrorResponse } from '@/utils/apisauce';
 
 export interface IProps {
   fetching: boolean;
-  error: boolean;
+  error: ICommonErrorResponse<IChatsParams> | null;
   chats: ReadonlyArray<IChatItem>;
   chatsCount: number;
 

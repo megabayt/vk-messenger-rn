@@ -13,4 +13,16 @@ export const apisauceMock: IApisauceService = {
       },
     },
   })),
+  getHistory: jest.fn(async () => ({
+    ...okResponse,
+    data: {
+      response: {
+        count: 0,
+        items: [],
+        conversations: [],
+        profiles: [],
+        groups: [],
+      },
+    },
+  })),
 };
