@@ -1,16 +1,15 @@
-import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import { SafeAreaView, Text } from 'react-native';
+import { MainTabNavigator } from './MainTabNavigator';
 import { LoginPageContainer } from '@/pages/LoginPage';
 
 const appNavigator = createSwitchNavigator(
   {
-    AuthSwitch: LoginPageContainer,
-    MainSwitch: () => (<SafeAreaView><Text>Main Switch</Text></SafeAreaView>),
+    Auth: LoginPageContainer,
+    Main: MainTabNavigator,
   },
   {
-    initialRouteName: 'AuthSwitch',
+    initialRouteName: 'Auth',
     resetOnBlur: true,
   });
 
