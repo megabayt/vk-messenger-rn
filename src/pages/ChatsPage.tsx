@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withNavigation } from 'react-navigation';
-import { ProgressBar } from 'material-bread';
+import { Spinner } from 'native-base';
 
 import { IStateUnion } from '@/store/reducers';
 import {
@@ -62,24 +62,24 @@ export const ChatsPageComponent = ({
       chat={info.item}
     />
   ), []);
+  const renderFooter = useCallback(() => fetching ? (
+    <Spinner color="gray" />
+  ) : null, [fetching]);
 
   return (
     <SafeAreaView>
-      <ProgressBar
-        testID="fetching"
-        visible={fetching}
-      />
       {!error
         ? (
           <FlatList
             data={chats}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
+            ListFooterComponent={renderFooter}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.5}
             refreshControl={
               <RefreshControl
-                refreshing={false}
+                refreshing={fetching}
                 onRefresh={chatsFetch}
               />
             }

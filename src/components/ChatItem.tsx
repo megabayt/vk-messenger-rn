@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { path } from 'ramda';
 import { connect } from 'react-redux';
-import { Avatar, Badge, ListItem } from 'material-bread';
-import { Image, Text, View } from 'react-native';
+import { Thumbnail, Badge } from 'native-base';
+import { Text, View } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 
 import styled from 'styled-components';
@@ -69,11 +69,9 @@ export const ChatItemComponent: React.FC<IProps> = ({
     if (avatar) {
       return (
         <Aside>
-          <Avatar
-            testID="avatar"
-            type="image"
-            size={48}
-            image={<Image source={{ uri: avatar }} />}
+          <LargeAvatar
+            circular
+            source={{ uri: avatar }}
           />
         </Aside>
       );
@@ -89,11 +87,9 @@ export const ChatItemComponent: React.FC<IProps> = ({
             <Row key={i}>
               {row.map(uri => uri && (
                 <AvatarCol key={uri}>
-                  <Avatar
-                    testID="avatar"
-                    type="image"
-                    size={20}
-                    image={<Image source={{ uri }} />}
+                  <SmallAvatar
+                    circular
+                    source={{ uri }}
                   />
                 </AvatarCol>
               ))}
@@ -110,12 +106,9 @@ export const ChatItemComponent: React.FC<IProps> = ({
           <Row>
             <Col>
               <AlignerEnd>
-                <Badge
-                  testID="unread"
-                  size={20}
-                  content={unreadCount}
-                  maxValue={99}
-                />
+                <Badge>
+                  {unreadCount}
+                </Badge>
               </AlignerEnd>
             </Col>
           </Row>
@@ -132,13 +125,16 @@ export const ChatItemComponent: React.FC<IProps> = ({
   }, [unreadCount, lastMessage]);
 
   return (
-    <ListItem
-      testID="list-item"
-      text={fullName}
-      secondaryText={lastMessage.text}
-      media={renderAvatar()}
-      actionItem={renderRight()}
-    />
+    <Wrapper>
+      <Row>
+        {renderAvatar()}
+        <Col>
+          <ListItemText numberOfLines={2}>{fullName}</ListItemText>
+          <ListItemSecondaryText numberOfLines={2}>{lastMessage.text}</ListItemSecondaryText>
+        </Col>
+        {renderRight()}
+      </Row>
+    </Wrapper>
   );
 };
 
@@ -154,6 +150,7 @@ const Aside = styled(Grid)`
   flex-shrink: 0;
   flex-basis: 48;
   width: 48;
+  margin-horizontal: 10;
 `;
 const AvatarCol = styled(Col)`
   margin-horizontal: 2;
@@ -162,4 +159,24 @@ const AvatarCol = styled(Col)`
 const AlignerEnd = styled(View)`
   flex-direction: row;
   justify-content: flex-end;
+`;
+const Wrapper = styled(Grid)`
+  margin-vertical: 10;
+`;
+const LargeAvatar = styled(Thumbnail)`
+  width: 48;
+  height: 48;
+`;
+const SmallAvatar = styled(Thumbnail)`
+  width: 20;
+  height: 20;
+`;
+const ListItemText = styled(Text)`
+  font-size: 16;
+  line-height: 16;
+`;
+const ListItemSecondaryText = styled(Text)`
+  font-size: 14;
+  line-height: 14;
+  margin-top: 4;
 `;

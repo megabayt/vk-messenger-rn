@@ -7,7 +7,12 @@ import {
 } from 'apisauce';
 import { config } from '@/constants/api';
 import { serialize } from '@/utils/helpers';
-import { IChatMessagesParams, IChatMessagesResponse, IChatsParams, IChatsResponse } from '@/store/actions/chat.actions';
+import {
+  IChatMessagesParams,
+  IChatMessagesResponse,
+  IChatsParams,
+  IChatsResponse,
+} from '@/store/actions/chat.actions';
 
 export const createApisauceService = (): IApisauceService => {
   const api: ApisauceInstance = create({
