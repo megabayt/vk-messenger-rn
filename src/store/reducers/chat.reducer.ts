@@ -29,7 +29,35 @@ export const chatReducer: Reducer<IChatState, IChatAction> = (state = initialCha
       case ChatActionTypes.ChatsSet:
         draftState.chats.fetching = false;
         (draftState.chats.data as IChatState['chats']['data']) =
-            action.payload as IChatState['chats']['data'];
+          action.payload as IChatState['chats']['data'];
+        break;
+      case ChatActionTypes.ChatsAppendFetch:
+        draftState.chats.fetching = true;
+        draftState.chats.error = false;
+        break;
+      case ChatActionTypes.ChatsAppendSet:
+        draftState.chats.fetching = false;
+        // @ts-ignore
+        draftState.chats.data.response.items = [
+          // @ts-ignore
+          ...draftState.chats.data.response.items,
+          // @ts-ignore
+          ...action.payload.response.items,
+        ];
+        // @ts-ignore
+        draftState.chats.data.response.profiles = [
+          // @ts-ignore
+          ...draftState.chats.data.response.profiles,
+          // @ts-ignore
+          ...action.payload.response.profiles,
+        ];
+        // @ts-ignore
+        draftState.chats.data.response.groups = [
+          // @ts-ignore
+          ...draftState.chats.data.response.groups,
+          // @ts-ignore
+          ...action.payload.response.groups,
+        ];
         break;
     }
   });

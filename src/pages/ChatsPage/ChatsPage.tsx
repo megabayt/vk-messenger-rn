@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { path } from 'ramda';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -12,11 +13,13 @@ import { ProgressBar } from 'material-bread';
 
 import { IStateUnion } from '@/store/reducers';
 import {
+  getChatsCountSelector,
   getConversationsSelector,
 } from '@/store/selectors/chat.selectors';
 import {
   chatsFetch as chatsFetchAction,
-  IChatItem,
+  chatsAppendFetch as chatsAppendFetchAction,
+  IChatItem, IChatsParams,
 } from '@/store/actions/chat.actions';
 import { ChatItemContainer } from '@/components/ChatItem';
 
@@ -24,20 +27,34 @@ export interface IProps {
   fetching: boolean;
   error: boolean;
   chats: ReadonlyArray<IChatItem>;
+  chatsCount: number;
 
-  chatsFetch: () => void;
+  chatsFetch: (params?: Partial<IChatsParams>) => void;
+  chatsAppendFetch: (params?: Partial<IChatsParams>) => void;
 }
 
 export const ChatsPageComponent = ({
   fetching,
   error,
   chats,
+  chatsCount,
   chatsFetch,
+  chatsAppendFetch,
 }: IProps): React.ReactElement => {
   useEffect(() => {
     chatsFetch();
   }, [chatsFetch]);
-  const keyExtractor = useCallback((chat: IChatItem) => String(chat.conversation.peer.id), []);
+  const handleLoadMore = useCallback(() => {
+    if (!fetching && chats.length < chatsCount) {
+      chatsAppendFetch({
+        count: 20,
+        offset: chats.length,
+      });
+    }
+  }, [fetching, chats, chatsCount, chatsAppendFetch]);
+
+  const keyExtractor =
+    useCallback((chat: IChatItem) => String(path(['conversation', 'peer', 'id'], chat)), []);
   const renderItem = useCallback((info: ListRenderItemInfo<IChatItem>) => (
     <ChatItemContainer
       testID="item"
@@ -57,6 +74,8 @@ export const ChatsPageComponent = ({
             data={chats}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
             refreshControl={
               <RefreshControl
                 refreshing={false}
@@ -77,8 +96,10 @@ export const ChatsPageContainer = connect(
     fetching: state.chat.chats.fetching,
     error: state.chat.chats.error,
     chats: getConversationsSelector(state),
+    chatsCount: getChatsCountSelector(state),
   }),
   {
     chatsFetch: chatsFetchAction,
+    chatsAppendFetch: chatsAppendFetchAction,
   }
 )(withNavigation(ChatsPageComponent));

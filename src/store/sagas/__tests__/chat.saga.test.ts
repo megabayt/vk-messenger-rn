@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { chatsFetchSaga, watchChat } from '@/store/sagas/chat.saga';
+import {chatsAppendFetchSaga, chatsFetchSaga, watchChat} from '@/store/sagas/chat.saga';
 import { apisauceMock } from '@/__mocks__/apisauceMock';
 import {
   ChatActionTypes,
@@ -26,6 +26,8 @@ describe('Chat sagas', () => {
   test('watch test', () => {
     const step = stepper(watchChat(apisauceMock));
     expect(step()).toEqual(takeLatest(ChatActionTypes.ChatsFetch, chatsFetchSaga, apisauceMock));
+    expect(step())
+      .toEqual(takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, apisauceMock));
     expect(step()).toBeUndefined();
   });
 });

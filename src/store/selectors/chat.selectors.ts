@@ -13,6 +13,9 @@ import { ICommonResponse } from '@/utils/apisauce';
 const getChatsSelector = (state: IStateUnion): ICommonResponse<IChatsResponse> | null =>
   path(['chat', 'chats', 'data'], state) || null;
 
+export const getChatsCountSelector = (state: IStateUnion): number =>
+  path(['chat', 'chats', 'data', 'response', 'count'], state) || 0;
+
 export const getChatProfilesCombiner =
   (data: ICommonResponse<IChatsResponse> | null): IChatMergedProfiles => {
     const getProfiles = path(['response', 'profiles']);

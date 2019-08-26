@@ -6,6 +6,7 @@ import { IApisauceService, ICommonOkResponse, ICommonResponse } from '@/utils/ap
 import {
   ChatActionTypes,
   chatsSet,
+  chatsAppendSet,
   IChatAction,
   IChatsParams,
   IChatsResponse,
@@ -19,6 +20,15 @@ export const chatsFetchSaga = (function* (api, action) {
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 
+export const chatsAppendFetchSaga = (function* (api, action) {
+  const result: ApiResponse<ICommonResponse<IChatsResponse>> =
+    yield call(api.getConversations, (action.payload as IChatsParams));
+  if (result.status === 200) {
+    yield put(chatsAppendSet(result.data as ICommonOkResponse<IChatsResponse>));
+  }
+} as (api: IApisauceService, action: IChatAction) => SagaIterator);
+
 export const watchChat = (function* (api) {
   yield takeLatest(ChatActionTypes.ChatsFetch, chatsFetchSaga, api);
+  yield takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, api);
 } as (api: IApisauceService) => SagaIterator);

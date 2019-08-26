@@ -10,13 +10,16 @@ import {
 
 describe('ChatItem component', () => {
   let wrapper: ShallowWrapper;
-  let props: IProps = {
-    chat: getConversationsCombiner(conversations)[0],
-    profiles: getChatProfilesCombiner(conversations),
-  };
+  let props: IProps;
   describe('avatars', () => {
     it('should render avatar if single conversation', () => {
+      props = {
+        chat: getConversationsCombiner(conversations)[0],
+        profiles: getChatProfilesCombiner(conversations),
+      };
       wrapper = shallow(<ChatItemComponent {...props}/>);
+      const listItem = wrapper.findWhere(node => node.prop('testID') === 'list-item');
+      wrapper = shallow(listItem.prop('media'));
       const el = wrapper.findWhere(node => node.prop('testID') === 'avatar');
       expect(el).toHaveLength(1);
     });
@@ -28,6 +31,8 @@ describe('ChatItem component', () => {
       const activeIds: ReadonlyArray<number> =
         path(['chat', 'conversation', 'chat_settings', 'active_ids'], props) || [];
       wrapper = shallow(<ChatItemComponent {...props}/>);
+      const listItem = wrapper.findWhere(node => node.prop('testID') === 'list-item');
+      wrapper = shallow(listItem.prop('media'));
       const el = wrapper.findWhere(node => node.prop('testID') === 'avatar');
       expect(el)
         .toHaveLength(activeIds.length > 4 ? 4 : activeIds.length);
@@ -35,18 +40,24 @@ describe('ChatItem component', () => {
   });
   describe('other fields', () => {
     beforeAll(() => {
+      props = {
+        chat: getConversationsCombiner(conversations)[0],
+        profiles: getChatProfilesCombiner(conversations),
+      };
       wrapper = shallow(<ChatItemComponent {...props}/>);
     });
     it('should render list item', () => {
       const el = wrapper.findWhere(node => node.prop('testID') === 'list-item');
       expect(el).toHaveLength(1);
-      expect(el.prop('text')).toBe('Гугл музыка');
-      expect(el.prop('secondaryText')).toBe('Вложение');
+      expect(el.prop('text')).toBe('Иван Иванов');
+      expect(el.prop('secondaryText')).toBe('Lorem ipsum dolor sit amet.');
     });
     it('should render badge with unread', () => {
+      const listItem = wrapper.findWhere(node => node.prop('testID') === 'list-item');
+      wrapper = shallow(listItem.prop('actionItem'));
       const el = wrapper.findWhere(node => node.prop('testID') === 'unread');
       expect(el).toHaveLength(1);
-      expect(el.children().text()).toBe('1');
+      expect(el.prop('content')).toBe(1);
     });
   });
 });

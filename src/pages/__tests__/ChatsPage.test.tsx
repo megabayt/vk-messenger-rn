@@ -15,6 +15,8 @@ describe('Chats page', () => {
     fetching: false,
     error: false,
     chats,
+    chatsCount: 2,
+    chatsAppendFetch: jest.fn(),
     chatsFetch: jest.fn(),
   };
   describe('rendering', () => {
