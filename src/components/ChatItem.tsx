@@ -76,6 +76,16 @@ export const ChatItemComponent: React.FC<IProps> = ({
         </Aside>
       );
     }
+    if (!avatars[0]) {
+      return (
+        <Aside>
+          <LargeAvatar
+            circular
+            source={{ uri: 'https://vk.com/images/deactivated_50.png' }}
+          />
+        </Aside>
+      );
+    }
     const rows = [
       [avatars[0], avatars[1]],
       [avatars[2], avatars[3]],
