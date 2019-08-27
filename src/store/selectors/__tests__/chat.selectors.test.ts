@@ -20,11 +20,13 @@ describe('chat selectors', () => {
     },
   };
   it('should get Chats', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chats = getChatsSelector(state as any);
     // @ts-ignore
     expect(chats).toEqual(state.chat.chats.data);
   });
   it('should get ChatsCount', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const chats = getChatsCountSelector(state as any);
     // @ts-ignore
     expect(chats).toEqual(state.chat.chats.data.response.count);

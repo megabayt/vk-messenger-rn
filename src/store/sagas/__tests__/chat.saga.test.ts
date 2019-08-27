@@ -36,6 +36,7 @@ describe('Chat sagas', () => {
     let step = stepper(chatsFetchSaga(apisauceMock, action));
     expect(step()).toEqual(call(apisauceMock.getConversations, (action.payload as IChatsParams)));
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let response: any = await apisauceMock.getConversations(action.payload as IChatsParams);
     expect(step(response)).toEqual(
       put(chatsSet(response.data as ICommonOkResponse<IChatsResponse>))

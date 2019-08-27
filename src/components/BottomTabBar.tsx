@@ -4,7 +4,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 
 export function BottomTabBar({
   navigation,
-}: NavigationInjectedProps) {
+}: NavigationInjectedProps): React.ReactElement {
   const { index } = navigation.state;
 
   const goToChats = useCallback(() => {
