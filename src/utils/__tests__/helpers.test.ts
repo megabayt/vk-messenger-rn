@@ -38,6 +38,8 @@ test('getAttachmentReplacer', () => {
   expect(getAttachmentReplacer(item)).toBe('Фото');
   item = set(lensPath(['last_message', 'attachments', 0, 'type']), 'doc', item);
   expect(getAttachmentReplacer(item)).toBe('Документ');
+  item = set(lensPath(['last_message', 'attachments', 0, 'type']), 'gift', item);
+  expect(getAttachmentReplacer(item)).toBe('Подарок');
   item = set(lensPath(['last_message', 'attachments', 0, 'type']), 'wtf', item);
   expect(getAttachmentReplacer(item)).toBe('Вложение');
   item = set(lensPath(['last_message', 'attachments']), [], item);

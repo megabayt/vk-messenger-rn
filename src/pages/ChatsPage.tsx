@@ -8,7 +8,7 @@ import {
   Text,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { withNavigation } from 'react-navigation';
+import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Spinner } from 'native-base';
 
 import { IStateUnion } from '@/store/reducers';
@@ -41,7 +41,8 @@ export const ChatsPageComponent = ({
   chatsCount,
   chatsFetch,
   chatsAppendFetch,
-}: IProps): React.ReactElement => {
+  navigation,
+}: IProps & NavigationInjectedProps): React.ReactElement => {
   useEffect(() => {
     chatsFetch();
   }, [chatsFetch]);
@@ -54,14 +55,19 @@ export const ChatsPageComponent = ({
     }
   }, [fetching, chats, chatsCount, chatsAppendFetch]);
 
+  const handlePress = useCallback((id: number) => () => {
+    navigation.push('Chat', { id });
+  }, [navigation]);
+
   const keyExtractor =
     useCallback((chat: IChatItem) => String(path(['conversation', 'peer', 'id'], chat)), []);
   const renderItem = useCallback((info: ListRenderItemInfo<IChatItem>) => (
     <ChatItemContainer
       testID="item"
       chat={info.item}
+      onPress={handlePress(info.item.conversation.peer.id)}
     />
-  ), []);
+  ), [handlePress]);
   const renderFooter = useCallback(() => fetching ? (
     <Spinner color="gray" />
   ) : null, [fetching]);

@@ -36,6 +36,7 @@ export function getAttachmentReplacer(item: RecursivePartial<IChatItem>): string
     case 'sticker': return 'Стикер';
     case 'photo': return 'Фото';
     case 'doc': return 'Документ';
+    case 'gift': return 'Подарок';
     default: {
       const fwdMessage = path(['last_message', 'fwd_messages', '0'], item)
         && 'Пересланные сообщения';

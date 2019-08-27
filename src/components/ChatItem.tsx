@@ -17,11 +17,13 @@ import { ChatAvatar } from '@/components/ChatAvatar';
 export interface IProps extends ITestProps {
   chat: IChatItem;
   profiles: IChatMergedProfiles;
+  onPress: () => void;
 }
 
 export const ChatItemComponent: React.FC<IProps> = ({
   profiles,
   chat,
+  onPress,
 }: IProps): React.ReactElement => {
   const avatars = useMemo(() => {
     const activeIds: ReadonlyArray<number> =
@@ -69,7 +71,7 @@ export const ChatItemComponent: React.FC<IProps> = ({
 
   return (
     <Wrapper>
-      <Row>
+      <Row onPress={onPress}>
         {avatar
           ? (
             <AsideProfileAvatar uri={avatar} />

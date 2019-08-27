@@ -37,7 +37,7 @@ export const createApisauceService = (): IApisauceService => {
     getConversations: (params) =>
       api.get(`/messages.getConversations?extended=1${serialize(params)}`),
     getHistory: (params) =>
-      api.get(`/messages.getConversations?extended=1${serialize(params)}`),
+      api.get(`/messages.getHistory?extended=1${serialize(params)}`),
   };
 };
 
