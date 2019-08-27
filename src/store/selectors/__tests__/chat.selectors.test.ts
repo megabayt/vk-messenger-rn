@@ -7,9 +7,10 @@ import {
 
 import { conversations } from '@/__mocks__/responses/getConversations';
 import { IStateUnion } from '@/store/reducers';
+import { RecursivePartial } from '@/interfaces';
 
 describe('chat selectors', () => {
-  const state: Partial<IStateUnion> = {
+  const state: RecursivePartial<IStateUnion> = {
     chat: {
       chats: {
         fetching: false,
