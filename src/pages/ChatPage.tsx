@@ -1,84 +1,89 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { path } from 'ramda';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { IStateUnion } from '@/store/reducers';
 import {
-  chatMessagesFetch as chatMessagesFetchAction, IChatMergedProfiles,
-  IChatMessagesParams,
-  IChatMessagesResponse,
+  chatMessagesFetch as chatMessagesFetchAction,
+  chatMessagesAppendFetch as chatMessagesAppendFetchAction,
+  chatSendFetch as chatSendFetchAction,
+  IChatMessagesParams, IChatSendParams,
 } from '@/store/actions/chat.actions';
-import { ICommonOkResponse } from '@/utils/apisauce';
-import { getChatProfilesSelector } from '@/store/selectors/chat.selectors';
+import {
+  getChatMessagesCountSelector,
+  getChatMessagesTransformedSelector,
+} from '@/store/selectors/chat.selectors';
+import { IMyProfileResponse } from '@/store/actions/profile.actions';
+import { ICommonErrorResponse } from '@/utils/apisauce';
 
 interface IProps {
   chatMessagesFetch: (params: Partial<IChatMessagesParams>) => void;
-  profiles: IChatMergedProfiles;
-  data: ICommonOkResponse<IChatMessagesResponse> | null;
+  chatMessagesAppendFetch: (params: Partial<IChatMessagesParams>) => void;
+  chatSendFetch: (params: Partial<IChatSendParams>) => void;
+  fetching: boolean;
+  error: ICommonErrorResponse<IChatMessagesParams> | null;
+  messages: Array<IMessage>;
+  messagesCount: number;
+  myProfile: IMyProfileResponse | null;
 }
 
 export function ChatPageComponent({
-  data,
-  profiles,
+  fetching,
+  messagesCount,
+  myProfile,
+  messages,
   chatMessagesFetch,
+  chatMessagesAppendFetch,
+  chatSendFetch,
   navigation,
 }: IProps & NavigationInjectedProps) {
-  const [messages, setMessages] = useState([] as Array<any>);
   const chatId = navigation.getParam('id');
 
   useEffect(() => {
     chatMessagesFetch({ peer_id: chatId });
   }, [chatId, chatMessagesFetch]);
 
-  useEffect(() => {
-    const newData = path(['response', 'items'], data) as IChatMessagesResponse['items'];
-    if (newData) {
-      setMessages(newData.map((item) => {
-        const fromId = item.from_id || -1;
-        const profile = profiles[fromId] || {};
-        const fullName = (() => {
-          const name = path(['name'], profile);
-          if (name) {
-            return name as string;
-          }
-          const firstName = path(['first_name'], profile);
-          const lastName = path(['last_name'], profile);
-          if (firstName && lastName) {
-            return `${firstName} ${lastName}`;
-          }
-          const title = path(['conversation', 'chat_settings', 'title'], item);
-          if (title) {
-            return title as string;
-          }
-          return 'Неизвестно';
-        })();
-        return {
-          _id: item.id,
-          text: item.text,
-          createdAt: item.date,
-          user: {
-            _id: fromId,
-            name: fullName,
-            avatar: profile.photo_50,
-          },
-        };
-      }));
+  const handleLoadEarlier = useCallback(() => {
+    if (!fetching && messages.length < messagesCount) {
+      chatMessagesAppendFetch({
+        peer_id: chatId,
+        count: 20,
+        offset: messages.length,
+      });
     }
-  }, [data, profiles]);
+  }, [
+    chatId,
+    fetching,
+    messages,
+    messagesCount,
+    chatMessagesAppendFetch,
+  ]);
 
-  const handleSend = useCallback((messages = []) => {
-    // this.setState(previousState => ({
-    //   messages: GiftedChat.append(previousState.messages, messages),
-    // }))
-  }, []);
+  const handleSend = useCallback(async (messages = []) => {
+    const [message] = messages;
+    chatSendFetch({
+      peer_id: chatId,
+      random_id: Math.random(),
+      message: message.text,
+    });
+  }, [
+    chatId,
+    chatSendFetch,
+  ]);
+
+  const user = useMemo(() => ({
+    _id: myProfile ? myProfile.id : '',
+    name: myProfile ? myProfile.first_name : '',
+    avatar: myProfile ? myProfile.photo_50 : '',
+  }), [myProfile]);
 
   return (
     <GiftedChat
-
       messages={messages}
       onSend={handleSend}
-      user={{ _id: 1 }}
+      loadEarlier
+      onLoadEarlier={handleLoadEarlier}
+      user={user}
     />
   );
 }
@@ -87,10 +92,14 @@ export const ChatPageContainer = connect(
   (state: IStateUnion) => ({
     fetching: state.chat.messages.fetching,
     error: state.chat.messages.error,
-    data: state.chat.messages.data,
-    profiles: getChatProfilesSelector(state),
+    messages: getChatMessagesTransformedSelector(state),
+    messagesCount: getChatMessagesCountSelector(state),
+    myProfile: state.profile.myProfile.data
+      && state.profile.myProfile.data.response,
   }),
   {
     chatMessagesFetch: chatMessagesFetchAction,
+    chatMessagesAppendFetch: chatMessagesAppendFetchAction,
+    chatSendFetch: chatSendFetchAction,
   }
 )(withNavigation(ChatPageComponent));

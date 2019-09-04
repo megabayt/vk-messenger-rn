@@ -2,7 +2,7 @@ import {
   getChatProfilesCombiner,
   getChatChatsCountSelector,
   getChatChatsSelector,
-  getChatConversationsCombiner,
+  getChatConversationsSelector,
 } from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';
@@ -32,7 +32,7 @@ describe('chat selectors', () => {
     expect(chats).toEqual(state.chat.chats.data.response.count);
   });
   it('should get conversations', () => {
-    const conv = getChatConversationsCombiner(conversations);
+    const conv = getChatConversationsSelector(state as any);
     // @ts-ignore
     expect(conv).toEqual(state.chat.chats.data.response.items);
   });

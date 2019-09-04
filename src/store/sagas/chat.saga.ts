@@ -20,7 +20,12 @@ import {
   IChatMessagesParams,
   chatMessagesSet,
   IChatMessagesResponse,
-  chatMessagesErrorSet, chatMessagesAppendSet, chatMessagesAppendErrorSet,
+  chatMessagesErrorSet,
+  chatMessagesAppendSet,
+  chatMessagesAppendErrorSet,
+  IChatSendParams,
+  chatSendSet,
+  chatSendErrorSet, chatMessagesFetch,
 } from '@/store/actions/chat.actions';
 
 export const chatsFetchSaga = (function* (api, action) {
@@ -63,9 +68,24 @@ export const chatMessagesAppendFetchSaga = (function* (api, action) {
   }
 } as (api: IApisauceService, action: IChatAction) => SagaIterator);
 
+export const chatSendFetchSaga = (function* (api, action) {
+  const result: ApiResponse<ICommonResponse<number>> =
+    yield call(api.sendMessage, (action.payload as IChatSendParams));
+  if (result.status === 200) {
+    yield put(chatSendSet(result.data as ICommonOkResponse<number>));
+    yield put(chatMessagesFetch({
+      peer_id: (action.payload as IChatSendParams).peer_id,
+    }));
+  } else {
+    yield put(chatSendErrorSet(result.data as ICommonErrorResponse<IChatSendParams>));
+  }
+} as (api: IApisauceService, action: IChatAction) => SagaIterator);
+
 export const watchChat = (function* (api) {
   yield takeLatest(ChatActionTypes.ChatsFetch, chatsFetchSaga, api);
   yield takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, api);
   yield takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, api);
   yield takeLatest(ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, api);
+  yield takeLatest(ChatActionTypes.ChatSendFetch, chatSendFetchSaga, api);
 } as (api: IApisauceService) => SagaIterator);
+

@@ -10,7 +10,7 @@ import { IChatItem, IChatMergedProfiles, IChatProfile } from '@/store/actions/ch
 import { IStateUnion } from '@/store/reducers';
 import { getChatProfilesSelector } from '@/store/selectors/chat.selectors';
 import { ITestProps } from '@/utils/tests';
-import { dateFormatter, getAttachmentReplacer } from '@/utils/helpers';
+import { dateFormatter, getAttachmentReplacer, getFullName } from '@/utils/helpers';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { ChatAvatar } from '@/components/ChatAvatar';
 
@@ -49,22 +49,7 @@ export const ChatItemComponent: React.FC<IProps> = ({
   const profile = useMemo(() => {
     return (path([peerId], profiles) || {}) as IChatProfile;
   }, [peerId, profiles]);
-  const fullName = useMemo(() => {
-    const name = path(['name'], profile);
-    if (name) {
-      return name as string;
-    }
-    const firstName = path(['first_name'], profile);
-    const lastName = path(['last_name'], profile);
-    if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
-    }
-    const title = path(['conversation', 'chat_settings', 'title'], chat);
-    if (title) {
-      return title as string;
-    }
-    return 'Неизвестно';
-  }, [profile, chat]);
+  const fullName = useMemo(() => getFullName(profile, chat), [profile, chat]);
   const avatar = useMemo(() => {
     return path(['photo_50'], profile) as string;
   }, [profile]);

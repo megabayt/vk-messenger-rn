@@ -15,6 +15,10 @@ export enum ChatActionTypes {
   ChatMessagesAppendFetch = 'CHAT_MESSAGES_APPEND_FETCH',
   ChatMessagesAppendErrorSet = 'CHAT_MESSAGES_APPEND_ERROR_SET',
   ChatMessagesAppendSet = 'CHAT_MESSAGES_APPEND_SET',
+
+  ChatSendFetch = 'CHAT_SEND_FETCH',
+  ChatSendErrorSet = 'CHAT_SEND_ERROR_SET',
+  ChatSendSet = 'CHAT_SEND_SET',
 }
 
 export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
@@ -66,7 +70,6 @@ export const chatMessagesSet = (data: ICommonOkResponse<IChatMessagesResponse>):
   payload: data,
 });
 
-
 export const chatMessagesAppendFetch = (params?: Partial<IChatMessagesParams>): IChatAction => ({
   type: ChatActionTypes.ChatMessagesAppendFetch,
   payload: params,
@@ -86,11 +89,32 @@ export const chatMessagesAppendSet = (
   payload: data,
 });
 
+export const chatSendFetch = (params?: Partial<IChatSendParams>): IChatAction => ({
+  type: ChatActionTypes.ChatSendFetch,
+  payload: params,
+});
+
+export const chatSendErrorSet = (
+  data: ICommonErrorResponse<IChatSendParams>
+): IChatAction => ({
+  type: ChatActionTypes.ChatSendErrorSet,
+  payload: data,
+});
+
+export const chatSendSet = (
+  data: ICommonOkResponse<number>
+): IChatAction => ({
+  type: ChatActionTypes.ChatSendSet,
+  payload: data,
+});
+
 export interface IChatAction extends Action<ChatActionTypes> {
   payload?: Partial<IChatsParams>
   | ICommonResponse<IChatsResponse>
   | Partial<IChatMessagesParams>
-  | ICommonResponse<IChatMessagesResponse>;
+  | ICommonResponse<IChatMessagesResponse>
+  | Partial<IChatSendParams>
+  | ICommonResponse<number>;
 }
 
 export type IChatsParams = {
@@ -247,7 +271,7 @@ export interface IChatMessagesResponse {
   profiles: Array<IChatProfile>;
   groups: Array<IChatGroup>;
 }
-interface IMessageItem {
+export interface IMessageItem {
   date: number;
   from_id: number;
   id: number;
@@ -265,4 +289,27 @@ interface IMessageItem {
   attachments: Array<any>;
   is_hidden: boolean;
   update_time?: number;
+}
+
+export type IChatSendParams = {
+  user_id: number;
+  random_id: number;
+  peer_id: number;
+  domain: string;
+  chat_id: number;
+  user_ids: string;
+  message: string;
+  guid: any;
+  lat: number;
+  long: number;
+  attachment: string;
+  reply_to: number;
+  forward_messages: string;
+  forward: any;
+  sticker_id: number;
+  group_id: number;
+  keyboard: any;
+  payload: any;
+  dont_parse_links: 1 | 0;
+  disable_mentions: 1 | 0;
 }

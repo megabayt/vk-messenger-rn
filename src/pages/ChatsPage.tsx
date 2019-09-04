@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { path } from 'ramda';
 import {
   FlatList,
@@ -43,9 +43,6 @@ export const ChatsPageComponent = ({
   chatsAppendFetch,
   navigation,
 }: IProps & NavigationInjectedProps): React.ReactElement => {
-  useEffect(() => {
-    chatsFetch();
-  }, [chatsFetch]);
   const handleLoadMore = useCallback(() => {
     if (!fetching && chats.length < chatsCount) {
       chatsAppendFetch({

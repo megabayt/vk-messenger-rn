@@ -3,7 +3,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   chatMessagesAppendFetchSaga,
   chatMessagesFetchSaga,
-  chatsAppendFetchSaga,
+  chatsAppendFetchSaga, chatSendFetchSaga,
   chatsFetchSaga,
   watchChat,
 } from '@/store/sagas/chat.saga';
@@ -137,14 +137,10 @@ describe('Chat sagas', () => {
   test('watch test', () => {
     const step = stepper(watchChat(apisauceMock));
     expect(step()).toEqual(takeLatest(ChatActionTypes.ChatsFetch, chatsFetchSaga, apisauceMock));
-    expect(step())
-      .toEqual(takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, apisauceMock));
-    expect(step())
-      .toEqual(takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, apisauceMock));
-    expect(step())
-      .toEqual(takeLatest(
-        ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock,
-      ));
+    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, apisauceMock));
+    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, apisauceMock));
+    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock));
+    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatSendFetch, chatSendFetchSaga, apisauceMock));
     expect(step()).toBeUndefined();
   });
 });

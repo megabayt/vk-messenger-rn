@@ -1,16 +1,16 @@
 import { pipe, keys, reduce, path } from 'ramda';
 import moment from 'moment';
-import { IChatItem } from '@/store/actions/chat.actions';
+import { IChatGroup, IChatItem, IChatProfile, IMessageItem } from '@/store/actions/chat.actions';
 import { RecursivePartial } from '@/interfaces';
 
 export interface IObjectWithStringValues {
-  [key: string]: string | number;
+  [key: string]: string | number | undefined;
 }
 
 export function serialize(object: IObjectWithStringValues): string {
   const serializeReduce = reduce(
     (result: string, key: keyof IObjectWithStringValues): string => {
-      return `${result}&${key}=${encodeURIComponent(object[key])}`;
+      return `${result}&${key}=${encodeURIComponent(object[key] || '')}`;
     }
     ,
     '' as string,
@@ -46,4 +46,24 @@ export function getAttachmentReplacer(item: RecursivePartial<IChatItem>): string
       return 'Вложение';
     }
   }
+}
+
+export function getFullName(
+  profile: IChatProfile | IChatGroup,
+  chat: IChatItem | IMessageItem,
+): string {
+  const name = path(['name'], profile);
+  if (name) {
+    return name as string;
+  }
+  const firstName = path(['first_name'], profile);
+  const lastName = path(['last_name'], profile);
+  if (firstName && lastName) {
+    return `${firstName} ${lastName}`;
+  }
+  const title = path(['conversation', 'chat_settings', 'title'], chat);
+  if (title) {
+    return title as string;
+  }
+  return 'Неизвестно';
 }
