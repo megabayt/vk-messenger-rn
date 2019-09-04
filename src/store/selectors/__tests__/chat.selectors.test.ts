@@ -1,8 +1,8 @@
 import {
   getChatProfilesCombiner,
-  getChatsCountSelector,
-  getChatsSelector,
-  getConversationsCombiner,
+  getChatChatsCountSelector,
+  getChatChatsSelector,
+  getChatConversationsCombiner,
 } from '../chat.selectors';
 
 import { conversations } from '@/__mocks__/responses/getConversations';
@@ -21,18 +21,18 @@ describe('chat selectors', () => {
   };
   it('should get Chats', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const chats = getChatsSelector(state as any);
+    const chats = getChatChatsSelector(state as any);
     // @ts-ignore
     expect(chats).toEqual(state.chat.chats.data);
   });
   it('should get ChatsCount', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const chats = getChatsCountSelector(state as any);
+    const chats = getChatChatsCountSelector(state as any);
     // @ts-ignore
     expect(chats).toEqual(state.chat.chats.data.response.count);
   });
   it('should get conversations', () => {
-    const conv = getConversationsCombiner(conversations);
+    const conv = getChatConversationsCombiner(conversations);
     // @ts-ignore
     expect(conv).toEqual(state.chat.chats.data.response.items);
   });

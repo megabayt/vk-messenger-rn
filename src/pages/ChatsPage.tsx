@@ -13,8 +13,8 @@ import { Spinner } from 'native-base';
 
 import { IStateUnion } from '@/store/reducers';
 import {
-  getChatsCountSelector,
-  getConversationsSelector,
+  getChatChatsCountSelector,
+  getChatConversationsSelector,
 } from '@/store/selectors/chat.selectors';
 import {
   chatsFetch as chatsFetchAction,
@@ -102,8 +102,8 @@ export const ChatsPageContainer = connect(
   (state: IStateUnion) => ({
     fetching: state.chat.chats.fetching,
     error: state.chat.chats.error,
-    chats: getConversationsSelector(state),
-    chatsCount: getChatsCountSelector(state),
+    chats: getChatConversationsSelector(state),
+    chatsCount: getChatChatsCountSelector(state),
   }),
   {
     chatsFetch: chatsFetchAction,

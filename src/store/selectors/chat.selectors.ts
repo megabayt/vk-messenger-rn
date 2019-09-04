@@ -10,10 +10,11 @@ import {
 import { IStateUnion } from '@/store/reducers';
 import { ICommonOkResponse } from '@/utils/apisauce';
 
-export const getChatsSelector = (state: IStateUnion): ICommonOkResponse<IChatsResponse> | null =>
-  path(['chat', 'chats', 'data'], state) || null;
+export const getChatChatsSelector =
+  (state: IStateUnion): ICommonOkResponse<IChatsResponse> | null =>
+    path(['chat', 'chats', 'data'], state) || null;
 
-export const getChatsCountSelector = (state: IStateUnion): number =>
+export const getChatChatsCountSelector = (state: IStateUnion): number =>
   path(['chat', 'chats', 'data', 'response', 'count'], state) || 0;
 
 export const getChatProfilesCombiner =
@@ -39,16 +40,16 @@ export const getChatProfilesCombiner =
   };
 
 export const getChatProfilesSelector = createSelector(
-  [getChatsSelector],
+  [getChatChatsSelector],
   getChatProfilesCombiner,
 );
 
-export const getConversationsCombiner =
+export const getChatConversationsCombiner =
   (data: ICommonOkResponse<IChatsResponse> | null): ReadonlyArray<IChatItem> => {
     return path(['response', 'items'], data) || [];
   };
 
-export const getConversationsSelector = createSelector(
-  [getChatsSelector],
-  getConversationsCombiner,
+export const getChatConversationsSelector = createSelector(
+  [getChatChatsSelector],
+  getChatConversationsCombiner,
 );
