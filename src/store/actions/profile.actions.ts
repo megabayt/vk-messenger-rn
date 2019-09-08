@@ -40,7 +40,9 @@ export type IMyProfileParams = {
   name_case?: 'nom' | 'gen' | 'dat' | 'acc' | 'ins' | 'abl';
 }
 
-export interface IMyProfileResponse {
+export type IMyProfileResponse = Array<IMyProfile>;
+
+export interface IMyProfile {
   id: number;
   first_name: string;
   last_name: string;

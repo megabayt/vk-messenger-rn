@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Text } from 'react-native';
 import { IStateUnion } from '@/store/reducers';
 import {
   chatMessagesFetch as chatMessagesFetchAction,
@@ -13,7 +14,8 @@ import {
   getChatMessagesCountSelector,
   getChatMessagesTransformedSelector,
 } from '@/store/selectors/chat.selectors';
-import { IMyProfileResponse } from '@/store/actions/profile.actions';
+import { IMyProfile } from '@/store/actions/profile.actions';
+import { getMyProfileSelector } from '@/store/selectors/profile.selectors';
 import { ICommonErrorResponse } from '@/utils/apisauce';
 
 interface IProps {
@@ -24,7 +26,7 @@ interface IProps {
   error: ICommonErrorResponse<IChatMessagesParams> | null;
   messages: Array<IMessage>;
   messagesCount: number;
-  myProfile: IMyProfileResponse | null;
+  myProfile: IMyProfile | null;
 }
 
 export function ChatPageComponent({
@@ -83,6 +85,14 @@ export function ChatPageComponent({
       onSend={handleSend}
       loadEarlier={messages.length !== messagesCount}
       onLoadEarlier={handleLoadEarlier}
+      parsePatterns={(linkStyle) => [
+        {
+          pattern: /https:\/\/vk.com\/wall-?\w+/,
+          style: linkStyle,
+          renderText: () => <Text>Запись со стены</Text>,
+          onPress: (text) => navigation.push('Wall', { text }),
+        },
+      ]}
       user={user}
     />
   );
@@ -94,8 +104,7 @@ export const ChatPageContainer = connect(
     error: state.chat.messages.error,
     messages: getChatMessagesTransformedSelector(state),
     messagesCount: getChatMessagesCountSelector(state),
-    myProfile: state.profile.myProfile.data
-      && state.profile.myProfile.data.response,
+    myProfile: getMyProfileSelector(state),
   }),
   {
     chatMessagesFetch: chatMessagesFetchAction,
