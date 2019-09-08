@@ -81,7 +81,7 @@ export function ChatPageComponent({
     <GiftedChat
       messages={messages}
       onSend={handleSend}
-      loadEarlier
+      loadEarlier={messages.length !== messagesCount}
       onLoadEarlier={handleLoadEarlier}
       user={user}
     />
