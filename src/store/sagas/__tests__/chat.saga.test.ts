@@ -137,10 +137,18 @@ describe('Chat sagas', () => {
   test('watch test', () => {
     const step = stepper(watchChat(apisauceMock));
     expect(step()).toEqual(takeLatest(ChatActionTypes.ChatsFetch, chatsFetchSaga, apisauceMock));
-    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, apisauceMock));
-    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, apisauceMock));
-    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock));
-    expect(step()).toEqual(takeLatest(ChatActionTypes.ChatSendFetch, chatSendFetchSaga, apisauceMock));
+    expect(step())
+      .toEqual(takeLatest(ChatActionTypes.ChatsAppendFetch, chatsAppendFetchSaga, apisauceMock));
+    expect(step())
+      .toEqual(takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, apisauceMock));
+    expect(step())
+      .toEqual(
+        takeLatest(
+          ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock
+        ),
+      );
+    expect(step())
+      .toEqual(takeLatest(ChatActionTypes.ChatSendFetch, chatSendFetchSaga, apisauceMock));
     expect(step()).toBeUndefined();
   });
 });

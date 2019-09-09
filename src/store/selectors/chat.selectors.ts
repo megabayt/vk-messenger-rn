@@ -1,7 +1,7 @@
-import {createSelector} from 'reselect';
-import {concat, converge, path, pipe, reduce} from 'ramda';
+import { createSelector } from 'reselect';
+import { concat, converge, path, pipe, reduce } from 'ramda';
 import moment from 'moment';
-import {IMessage} from 'react-native-gifted-chat';
+import { IMessage } from 'react-native-gifted-chat';
 import {
   IAttachmentType,
   IChatGroup,
@@ -13,9 +13,9 @@ import {
   IItemAttachment,
   IMessageItem,
 } from '@/store/actions/chat.actions';
-import {IStateUnion} from '@/store/reducers';
-import {ICommonOkResponse} from '@/utils/apisauce';
-import {getFullName} from '@/utils/helpers';
+import { IStateUnion } from '@/store/reducers';
+import { ICommonOkResponse } from '@/utils/apisauce';
+import { getFullName } from '@/utils/helpers';
 
 export const getChatChatsSelector =
   (state: IStateUnion): ICommonOkResponse<IChatsResponse> | null =>
@@ -91,32 +91,40 @@ export const getChatMessagesTransformedCombiner =
               return { ...message, image: photoSizes[photoSizes.length - 1].url };
             case IAttachmentType.Sticker:
               const sticker: Array<{ url: string }> = path(['sticker', 'images'], attachment) || [];
-              return { ...message, image: sticker[sticker.length - 1].url };
+              return { ...message, text: `sticker|${sticker[sticker.length - 1].url}` };
             case IAttachmentType.Link:
-              return { ...message, text: path(['link', 'url'], attachment) || '' };
-            case IAttachmentType.Audio:
-              const artist: string = path(['audio', 'artist'], attachment) || '';
-              const title: string = path(['audio', 'title'], attachment) || '';
+              const linkPreview: Array<{ url: string }> =
+                path(['link', 'photo', 'sizes'], attachment) || [];
+              const linkPreviewUrl = path([linkPreview.length - 1, 'url'], linkPreview) || '';
+              const linkUrl = path(['link', 'url'], attachment) || '';
               return {
                 ...message,
-                text: `${artist} - ${title}`,
-                audio: path(['audio', 'url'], attachment) || '',
+                text: `link|${linkPreviewUrl}|${linkUrl}`,
+              };
+            case IAttachmentType.Audio:
+              const audioSinger: string = path(['audio', 'artist'], attachment) || '';
+              const audioTitle: string = path(['audio', 'title'], attachment) || '';
+              const audioUrl = path(['audio', 'url'], attachment) || '';
+              return {
+                ...message,
+                text: `audio|${audioSinger} - ${audioTitle}|${audioUrl}`,
               };
             case IAttachmentType.Video:
-              const previews: Array<{ url: string }> = path(['video', 'image'], attachment) || [];
+              const videoPreviews: Array<{ url: string }> =
+                path(['video', 'image'], attachment) || [];
               const videoOwnerId: string = path(['video', 'owner_id'], attachment) || '';
               const videoId: string = path(['video', 'id'], attachment) || '';
               return {
                 ...message,
                 text: `https://vk.com/video${videoOwnerId}_${videoId}`,
-                audio: previews[previews.length - 1].url,
+                image: videoPreviews[videoPreviews.length - 1].url,
               };
             case IAttachmentType.Wall:
               const wallOwnerId: string = path(['wall', 'from_id'], attachment) || '';
               const wallId: string = path(['wall', 'id'], attachment) || '';
               return {
                 ...message,
-                text: `https://vk.com/wall${wallOwnerId}_${wallId}`,
+                text: `wall|https://vk.com/wall${wallOwnerId}_${wallId}`,
               };
           }
           return message;

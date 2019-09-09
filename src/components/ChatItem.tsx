@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { path } from 'ramda';
 import { connect } from 'react-redux';
-import { Badge } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, Badge } from 'native-base';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 
 import styled from 'styled-components';
@@ -68,17 +67,6 @@ export const ChatItemComponent: React.FC<IProps> = ({
           <ListItemSecondaryText numberOfLines={2}>{lastMessage.text}</ListItemSecondaryText>
         </Col>
         <AsideRight>
-          {unreadCount ? (
-            <Row>
-              <Col>
-                <AlignerEnd>
-                  <Badge>
-                    {unreadCount}
-                  </Badge>
-                </AlignerEnd>
-              </Col>
-            </Row>
-          ) : null}
           <Row>
             <Col>
               <AlignerEnd>
@@ -86,6 +74,19 @@ export const ChatItemComponent: React.FC<IProps> = ({
               </AlignerEnd>
             </Col>
           </Row>
+          {unreadCount ? (
+            <Row>
+              <Col>
+                <AlignerEnd>
+                  <Badge>
+                    <Text>
+                      {unreadCount}
+                    </Text>
+                  </Badge>
+                </AlignerEnd>
+              </Col>
+            </Row>
+          ) : null}
         </AsideRight>
       </Row>
     </Wrapper>

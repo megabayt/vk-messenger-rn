@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { Text } from 'react-native';
+import styled from 'styled-components';
+import { Thumbnail, View, Text } from 'native-base';
+import { Linking } from 'react-native';
 import { IStateUnion } from '@/store/reducers';
 import {
   chatMessagesFetch as chatMessagesFetchAction,
@@ -85,18 +87,72 @@ export function ChatPageComponent({
       onSend={handleSend}
       loadEarlier={messages.length !== messagesCount}
       onLoadEarlier={handleLoadEarlier}
-      parsePatterns={(linkStyle) => [
-        {
-          pattern: /https:\/\/vk.com\/wall-?\w+/,
-          style: linkStyle,
-          renderText: () => <Text>Запись со стены</Text>,
-          onPress: (text) => navigation.push('Wall', { text }),
-        },
-      ]}
+      parsePatterns={parsePatterns}
       user={user}
     />
   );
 }
+
+const parsePatterns = () => [
+  {
+    pattern: /wall\|.*/,
+    renderText: (text: string): React.ReactElement => <StyledWallLink text={text} />,
+  },
+  {
+    pattern: /link\|.*/,
+    renderText: (text: string) => <ExternalLink text={text} />,
+  },
+  // {
+  //   pattern: /sticker\|.*/,
+  //   renderText: () => <Text>Запись со стены</Text>,
+  //   // onPress: (text) => navigation.push('Wall', { text }),
+  // },
+];
+
+const WallLink = withNavigation(({
+  navigation,
+  text,
+  ...props
+}: NavigationInjectedProps & { text: string }) => {
+  const handlePress = useCallback(() => {
+    const [
+      ,
+      ownerId = null,
+      wallId = null,
+    ] = /https:\/\/vk.com\/wall-(\d+)_(\d+)/g.exec(text) || [];
+    navigation.push('Wall', { ownerId, wallId });
+  }, [navigation, text]);
+  return <Text {...props} onPress={handlePress}>Запись со стены</Text>;
+});
+
+const StyledWallLink = styled(WallLink)`
+  color: #017afb;
+`;
+
+const ExternalLink = ({ text, ...props }: { text: string }) => {
+  const [, preview, url] = text.split('|');
+
+  const source = useMemo(() => ({ uri: preview }), [preview]);
+
+  const handlePress = useCallback(() => {
+    Linking.openURL(url);
+  }, [url]);
+
+  return (
+    <>
+      <Thumbnail square large source={source} />
+      <StyledExternalLinkText
+        onPress={handlePress}
+      >
+        {url}
+      </StyledExternalLinkText>
+    </>
+  );
+};
+
+const StyledExternalLinkText = styled(Text)`
+  color: #017afb;
+`;
 
 export const ChatPageContainer = connect(
   (state: IStateUnion) => ({

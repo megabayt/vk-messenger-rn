@@ -5,8 +5,8 @@ import {
   ListRenderItemInfo,
   RefreshControl,
   SafeAreaView,
-  Text,
 } from 'react-native';
+import { Text } from 'native-base';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Spinner } from 'native-base';
