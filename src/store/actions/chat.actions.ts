@@ -15,6 +15,10 @@ export enum ChatActionTypes {
   ChatMessagesAppendFetch = 'CHAT_MESSAGES_APPEND_FETCH',
   ChatMessagesAppendErrorSet = 'CHAT_MESSAGES_APPEND_ERROR_SET',
   ChatMessagesAppendSet = 'CHAT_MESSAGES_APPEND_SET',
+
+  ChatSendFetch = 'CHAT_SEND_FETCH',
+  ChatSendErrorSet = 'CHAT_SEND_ERROR_SET',
+  ChatSendSet = 'CHAT_SEND_SET',
 }
 
 export const chatsFetch = (params?: Partial<IChatsParams>): IChatAction => ({
@@ -66,7 +70,6 @@ export const chatMessagesSet = (data: ICommonOkResponse<IChatMessagesResponse>):
   payload: data,
 });
 
-
 export const chatMessagesAppendFetch = (params?: Partial<IChatMessagesParams>): IChatAction => ({
   type: ChatActionTypes.ChatMessagesAppendFetch,
   payload: params,
@@ -86,11 +89,32 @@ export const chatMessagesAppendSet = (
   payload: data,
 });
 
+export const chatSendFetch = (params?: Partial<IChatSendParams>): IChatAction => ({
+  type: ChatActionTypes.ChatSendFetch,
+  payload: params,
+});
+
+export const chatSendErrorSet = (
+  data: ICommonErrorResponse<IChatSendParams>
+): IChatAction => ({
+  type: ChatActionTypes.ChatSendErrorSet,
+  payload: data,
+});
+
+export const chatSendSet = (
+  data: ICommonOkResponse<number>
+): IChatAction => ({
+  type: ChatActionTypes.ChatSendSet,
+  payload: data,
+});
+
 export interface IChatAction extends Action<ChatActionTypes> {
   payload?: Partial<IChatsParams>
   | ICommonResponse<IChatsResponse>
   | Partial<IChatMessagesParams>
-  | ICommonResponse<IChatMessagesResponse>;
+  | ICommonResponse<IChatMessagesResponse>
+  | Partial<IChatSendParams>
+  | ICommonResponse<number>;
 }
 
 export type IChatsParams = {
@@ -240,29 +264,200 @@ export type IChatMessagesParams = {
   group_id: number;
   extended: 1 | 0;
 }
+
 export interface IChatMessagesResponse {
-  count: number;
-  items: Array<IMessageItem>;
+  count:         number;
+  items:         Array<IMessageItem>;
   conversations: Array<IConversation>;
-  profiles: Array<IChatProfile>;
-  groups: Array<IChatGroup>;
+  profiles:      Array<IChatProfile>;
+  groups:        Array<IChatGroup>;
 }
-interface IMessageItem {
-  date: number;
-  from_id: number;
-  id: number;
-  out: number;
-  peer_id: number;
-  text: string;
+
+export interface IMessageItem {
+  date:                    number;
+  from_id:                 number;
+  id:                      number;
+  out:                     number;
+  peer_id:                 number;
+  text:                    string;
   conversation_message_id: number;
-  // TODO: Убрать any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fwd_messages: Array<any>;
-  important: boolean;
+  fwd_messages:            Array<IFwdMessage>;
+  important:               boolean;
+  random_id:               number;
+  attachments:             Array<IItemAttachment>;
+  is_hidden:               boolean;
+}
+
+export interface IItemAttachment {
+  type:     IAttachmentType;
+  wall?:    IWallAttachment;
+  link?:    ILinkAttachment;
+  photo?:   IPhotoAttachment;
+  sticker?: IStickerAttachment;
+}
+
+export interface ILinkAttachment {
+  url:          string;
+  title:        string;
+  caption?:     string;
+  description:  string;
+  photo:        IPhotoAttachment;
+  is_favorite?: boolean;
+  target?:      string;
+}
+
+export interface IPhotoAttachment {
+  id:          number;
+  album_id:    number;
+  owner_id:    number;
+  sizes:       Array<IAttachmentSize>;
+  text:        string;
+  date:        number;
+  access_key?: string;
+  user_id?:    number;
+  post_id?:    number;
+}
+
+export interface IAttachmentSize {
+  type?:  ISizeType;
+  url:    string;
+  width:  number;
+  height: number;
+}
+
+export enum ISizeType {
+  K = 'k',
+  L = 'l',
+  M = 'm',
+  O = 'o',
+  P = 'p',
+  Q = 'q',
+  R = 'r',
+  S = 's',
+  Temp = 'temp',
+  W = 'w',
+  X = 'x',
+  Y = 'y',
+  Z = 'z',
+}
+
+export interface IStickerAttachment {
+  product_id:             number;
+  sticker_id:             number;
+  images:                 Array<IAttachmentSize>;
+  images_with_background: Array<IAttachmentSize>;
+  animation_url?:         string;
+}
+
+export enum IAttachmentType {
+  Link = 'link',
+  Photo = 'photo',
+  Sticker = 'sticker',
+  Wall = 'wall',
+  Audio = 'audio',
+  Video = 'video',
+}
+
+export interface IWallAttachment {
+  id:            number;
+  from_id:       number;
+  to_id:         number;
+  date:          number;
+  post_type:     string;
+  text:          string;
+  copy_history?: Array<ICopyHistory>;
+  marked_as_ads: number;
+  post_source:   IWallPostSource;
+  comments:      IWallComment;
+  likes:         IWallLikes;
+  reposts:       IWallReposts;
+  views:         IWallViews;
+  is_favorite:   boolean;
+  access_key:    string;
+  attachments?:  Array<IWallContentAttachment>;
+  signer_id?:    number;
+}
+
+export interface IWallContentAttachment {
+  type:   IAttachmentType;
+  photo?: IPhotoAttachment;
+  link?:  ILinkAttachment;
+}
+
+export interface IWallComment {
+  count:            number;
+  can_post:         number;
+  groups_can_post?: boolean;
+}
+
+export interface ICopyHistory {
+  id:          number;
+  owner_id:    number;
+  from_id:     number;
+  date:        number;
+  post_type:   string;
+  text:        string;
+  attachments: Array<ICopyHistoryAttachment>;
+  post_source: ICopyHistoryPostSource;
+}
+
+export interface ICopyHistoryAttachment {
+  type:  IAttachmentType;
+  photo: IPhotoAttachment;
+}
+
+export interface ICopyHistoryPostSource {
+  type: string;
+}
+
+export interface IWallLikes {
+  count:       number;
+  user_likes:  number;
+  can_like:    number;
+  can_publish: number;
+}
+
+export interface IWallPostSource {
+  type:      string;
+  platform?: string;
+}
+
+export interface IWallReposts {
+  count:         number;
+  user_reposted: number;
+}
+
+export interface IWallViews {
+  count: number;
+}
+
+export interface IFwdMessage {
+  date:                    number;
+  from_id:                 number;
+  text:                    string;
+  attachments:             Array<any>;
+  conversation_message_id: number;
+}
+
+export type IChatSendParams = {
+  user_id: number;
   random_id: number;
-  // TODO: Убрать any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  attachments: Array<any>;
-  is_hidden: boolean;
-  update_time?: number;
+  peer_id: number;
+  domain: string;
+  chat_id: number;
+  user_ids: string;
+  message: string;
+  guid: any;
+  lat: number;
+  long: number;
+  attachment: string;
+  reply_to: number;
+  forward_messages: string;
+  forward: any;
+  sticker_id: number;
+  group_id: number;
+  keyboard: any;
+  payload: any;
+  dont_parse_links: 1 | 0;
+  disable_mentions: 1 | 0;
 }

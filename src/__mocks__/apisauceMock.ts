@@ -25,4 +25,6 @@ export const apisauceMock: IApisauceService = {
       },
     },
   })),
+  getUsers: jest.fn(),
+  sendMessage: jest.fn(),
 };

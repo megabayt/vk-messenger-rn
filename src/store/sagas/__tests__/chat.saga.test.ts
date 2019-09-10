@@ -3,7 +3,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   chatMessagesAppendFetchSaga,
   chatMessagesFetchSaga,
-  chatsAppendFetchSaga,
+  chatsAppendFetchSaga, chatSendFetchSaga,
   chatsFetchSaga,
   watchChat,
 } from '@/store/sagas/chat.saga';
@@ -142,9 +142,13 @@ describe('Chat sagas', () => {
     expect(step())
       .toEqual(takeLatest(ChatActionTypes.ChatMessagesFetch, chatMessagesFetchSaga, apisauceMock));
     expect(step())
-      .toEqual(takeLatest(
-        ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock,
-      ));
+      .toEqual(
+        takeLatest(
+          ChatActionTypes.ChatMessagesAppendFetch, chatMessagesAppendFetchSaga, apisauceMock
+        ),
+      );
+    expect(step())
+      .toEqual(takeLatest(ChatActionTypes.ChatSendFetch, chatSendFetchSaga, apisauceMock));
     expect(step()).toBeUndefined();
   });
 });

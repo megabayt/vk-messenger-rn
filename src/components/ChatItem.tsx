@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { path } from 'ramda';
 import { connect } from 'react-redux';
-import { Badge } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, Badge } from 'native-base';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 
 import styled from 'styled-components';
@@ -10,18 +9,20 @@ import { IChatItem, IChatMergedProfiles, IChatProfile } from '@/store/actions/ch
 import { IStateUnion } from '@/store/reducers';
 import { getChatProfilesSelector } from '@/store/selectors/chat.selectors';
 import { ITestProps } from '@/utils/tests';
-import { dateFormatter, getAttachmentReplacer } from '@/utils/helpers';
+import { dateFormatter, getAttachmentReplacer, getFullName } from '@/utils/helpers';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { ChatAvatar } from '@/components/ChatAvatar';
 
 export interface IProps extends ITestProps {
   chat: IChatItem;
   profiles: IChatMergedProfiles;
+  onPress: () => void;
 }
 
 export const ChatItemComponent: React.FC<IProps> = ({
   profiles,
   chat,
+  onPress,
 }: IProps): React.ReactElement => {
   const avatars = useMemo(() => {
     const activeIds: ReadonlyArray<number> =
@@ -47,29 +48,14 @@ export const ChatItemComponent: React.FC<IProps> = ({
   const profile = useMemo(() => {
     return (path([peerId], profiles) || {}) as IChatProfile;
   }, [peerId, profiles]);
-  const fullName = useMemo(() => {
-    const name = path(['name'], profile);
-    if (name) {
-      return name as string;
-    }
-    const firstName = path(['first_name'], profile);
-    const lastName = path(['last_name'], profile);
-    if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
-    }
-    const title = path(['conversation', 'chat_settings', 'title'], chat);
-    if (title) {
-      return title as string;
-    }
-    return 'Неизвестно';
-  }, [profile, chat]);
+  const fullName = useMemo(() => getFullName(profile, chat), [profile, chat]);
   const avatar = useMemo(() => {
     return path(['photo_50'], profile) as string;
   }, [profile]);
 
   return (
     <Wrapper>
-      <Row>
+      <Row onPress={onPress}>
         {avatar
           ? (
             <AsideProfileAvatar uri={avatar} />
@@ -81,17 +67,6 @@ export const ChatItemComponent: React.FC<IProps> = ({
           <ListItemSecondaryText numberOfLines={2}>{lastMessage.text}</ListItemSecondaryText>
         </Col>
         <AsideRight>
-          {unreadCount ? (
-            <Row>
-              <Col>
-                <AlignerEnd>
-                  <Badge>
-                    {unreadCount}
-                  </Badge>
-                </AlignerEnd>
-              </Col>
-            </Row>
-          ) : null}
           <Row>
             <Col>
               <AlignerEnd>
@@ -99,6 +74,19 @@ export const ChatItemComponent: React.FC<IProps> = ({
               </AlignerEnd>
             </Col>
           </Row>
+          {unreadCount ? (
+            <Row>
+              <Col>
+                <AlignerEnd>
+                  <Badge>
+                    <Text>
+                      {unreadCount}
+                    </Text>
+                  </Badge>
+                </AlignerEnd>
+              </Col>
+            </Row>
+          ) : null}
         </AsideRight>
       </Row>
     </Wrapper>

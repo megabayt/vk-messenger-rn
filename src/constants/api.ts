@@ -33,6 +33,6 @@ export const config = {
         + '&response_type=token',
   BASE_URL: 'https://api.vk.com/method/',
   TIMEOUT: 5 * 1000,
-  VERSION: 5.92,
+  VERSION: 5.101,
   USE_FIXTURES: false,
 };

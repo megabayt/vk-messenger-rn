@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { path } from 'ramda';
 import {
   FlatList,
   ListRenderItemInfo,
   RefreshControl,
   SafeAreaView,
-  Text,
 } from 'react-native';
+import { Text } from 'native-base';
 import { connect } from 'react-redux';
-import { withNavigation } from 'react-navigation';
+import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { Spinner } from 'native-base';
 
 import { IStateUnion } from '@/store/reducers';
 import {
-  getChatsCountSelector,
-  getConversationsSelector,
+  getChatChatsCountSelector,
+  getChatConversationsSelector,
 } from '@/store/selectors/chat.selectors';
 import {
   chatsFetch as chatsFetchAction,
@@ -41,10 +41,8 @@ export const ChatsPageComponent = ({
   chatsCount,
   chatsFetch,
   chatsAppendFetch,
-}: IProps): React.ReactElement => {
-  useEffect(() => {
-    chatsFetch();
-  }, [chatsFetch]);
+  navigation,
+}: IProps & NavigationInjectedProps): React.ReactElement => {
   const handleLoadMore = useCallback(() => {
     if (!fetching && chats.length < chatsCount) {
       chatsAppendFetch({
@@ -54,14 +52,19 @@ export const ChatsPageComponent = ({
     }
   }, [fetching, chats, chatsCount, chatsAppendFetch]);
 
+  const handlePress = useCallback((id: number) => () => {
+    navigation.push('Chat', { id });
+  }, [navigation]);
+
   const keyExtractor =
     useCallback((chat: IChatItem) => String(path(['conversation', 'peer', 'id'], chat)), []);
   const renderItem = useCallback((info: ListRenderItemInfo<IChatItem>) => (
     <ChatItemContainer
       testID="item"
       chat={info.item}
+      onPress={handlePress(info.item.conversation.peer.id)}
     />
-  ), []);
+  ), [handlePress]);
   const renderFooter = useCallback(() => fetching ? (
     <Spinner color="gray" />
   ) : null, [fetching]);
@@ -96,8 +99,8 @@ export const ChatsPageContainer = connect(
   (state: IStateUnion) => ({
     fetching: state.chat.chats.fetching,
     error: state.chat.chats.error,
-    chats: getConversationsSelector(state),
-    chatsCount: getChatsCountSelector(state),
+    chats: getChatConversationsSelector(state),
+    chatsCount: getChatChatsCountSelector(state),
   }),
   {
     chatsFetch: chatsFetchAction,

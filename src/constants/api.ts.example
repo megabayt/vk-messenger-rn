@@ -19,20 +19,20 @@ export enum VkontakteScopeList {
   stats = 1048576,
   email = 4194304,
   market = 134217728,
-};
+}
+
 const appId = 12345678; // your client_id from https://vk.com/dev
-// eslint-disable-next-line
 const scope = VkontakteScopeList.friends | VkontakteScopeList.messages | VkontakteScopeList.offline;
 
 export const config = {
   OAUTH_URL: 'https://oauth.vk.com/authorize?'
-      + `client_id=${appId}`
-      + `&scope=${scope}`
-      + '&redirect_uri=https://oauth.vk.com/blank.html'
-      + '&display=page'
-      + '&response_type=token',
+        + `client_id=${appId}`
+        + `&scope=${scope}`
+        + '&redirect_uri=https://oauth.vk.com/blank.html'
+        + '&display=page'
+        + '&response_type=token',
   BASE_URL: 'https://api.vk.com/method/',
   TIMEOUT: 5 * 1000,
-  VERSION: 5.92,
+  VERSION: 5.101,
   USE_FIXTURES: false,
 };

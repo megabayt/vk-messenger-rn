@@ -9,10 +9,14 @@ import { config } from '@/constants/api';
 import { serialize } from '@/utils/helpers';
 import {
   IChatMessagesParams,
-  IChatMessagesResponse,
+  IChatMessagesResponse, IChatSendParams,
   IChatsParams,
   IChatsResponse,
 } from '@/store/actions/chat.actions';
+import {
+  IMyProfileResponse,
+  IMyProfileParams,
+} from '@/store/actions/profile.actions';
 
 export const createApisauceService = (): IApisauceService => {
   const api: ApisauceInstance = create({
@@ -37,7 +41,9 @@ export const createApisauceService = (): IApisauceService => {
     getConversations: (params) =>
       api.get(`/messages.getConversations?extended=1${serialize(params)}`),
     getHistory: (params) =>
-      api.get(`/messages.getConversations?extended=1${serialize(params)}`),
+      api.get(`/messages.getHistory?extended=1${serialize(params)}`),
+    getUsers: (params) => api.get(`/users.get?extended=1${serialize(params)}`),
+    sendMessage: (params) => api.get(`/messages.send?extended=1${serialize(params)}`),
   };
 };
 
@@ -57,6 +63,12 @@ export type IApisauceService = {
   getHistory: (
     params: IChatMessagesParams
   ) => Promise<ApiResponse<ICommonResponse<IChatMessagesResponse, IChatMessagesParams>>>;
+  getUsers: (
+    params: Partial<IMyProfileParams>
+  ) => Promise<ApiResponse<ICommonResponse<IMyProfileResponse, IMyProfileParams>>>;
+  sendMessage: (
+    params: IChatSendParams
+  ) => Promise<ApiResponse<ICommonResponse<number, IMyProfileParams>>>;
 };
 
 export interface ICommonOkResponse<T> {
