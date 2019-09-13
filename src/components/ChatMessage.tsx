@@ -30,6 +30,12 @@ export function ChatMessage(props: MessageText['props']) {
           url={splittedText[1]}
         />
       );
+    case text.indexOf('gift|') !== -1:
+      return (
+        <ChatMessageSticker
+          url={splittedText[1]}
+        />
+      );
     case text.indexOf('link|') !== -1:
       return (
         <ChatMessageLink

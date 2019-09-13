@@ -92,6 +92,9 @@ export const getChatMessagesTransformedCombiner =
             case IAttachmentType.Sticker:
               const sticker: Array<{ url: string }> = path(['sticker', 'images'], attachment) || [];
               return { ...message, text: `sticker|${sticker[sticker.length - 1].url}` };
+            case IAttachmentType.Gift:
+              const giftUrl = path(['gift', 'thumb_256'], attachment) || '';
+              return { ...message, text: `gift|${giftUrl}` };
             case IAttachmentType.Link:
               const linkPreview: Array<{ url: string }> =
                 path(['link', 'photo', 'sizes'], attachment) || [];

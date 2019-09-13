@@ -356,6 +356,7 @@ export enum IAttachmentType {
   Wall = 'wall',
   Audio = 'audio',
   Video = 'video',
+  Gift = 'gift',
 }
 
 export interface IWallAttachment {
