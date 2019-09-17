@@ -1,7 +1,12 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { path } from 'ramda';
+import { ActionsProps, GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Text, View } from 'native-base';
+import styled from 'styled-components';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import EmojiSelector, { Categories } from 'react-native-emoji-selector';
 import { IStateUnion } from '@/store/reducers';
 import {
   chatMessagesFetch as chatMessagesFetchAction,
@@ -17,6 +22,7 @@ import { IMyProfile } from '@/store/actions/profile.actions';
 import { getMyProfileSelector } from '@/store/selectors/profile.selectors';
 import { ICommonErrorResponse } from '@/utils/apisauce';
 import { ChatMessage } from '@/components/ChatMessage';
+import { deviceHeight } from '@/constants/device';
 
 interface IProps {
   chatMessagesFetch: (params: Partial<IChatMessagesParams>) => void;
@@ -40,6 +46,17 @@ export function ChatPageComponent({
   navigation,
 }: IProps & NavigationInjectedProps) {
   const chatId = navigation.getParam('id');
+
+  const [showEmojiSelector, setShowEmojiSelector] = useState(false);
+  const toggleEmojiSelector =
+    useCallback(() => setShowEmojiSelector(v => !v), [setShowEmojiSelector]);
+
+  const [inputText, setInputText] = useState('');
+
+  const handleEmojiSelector = useCallback((emoji) => {
+    setInputText(inputText + emoji);
+    setShowEmojiSelector(false);
+  }, [inputText, setInputText, setShowEmojiSelector]);
 
   useEffect(() => {
     chatMessagesFetch({ peer_id: chatId });
@@ -80,16 +97,46 @@ export function ChatPageComponent({
   }), [myProfile]);
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={handleSend}
-      loadEarlier={messages.length !== messagesCount}
-      onLoadEarlier={handleLoadEarlier}
-      renderMessageText={ChatMessage}
-      user={user}
-    />
+    <>
+      <GiftedChat
+        text={inputText}
+        onInputTextChanged={setInputText}
+        messages={messages}
+        onSend={handleSend}
+        loadEarlier={messages.length !== messagesCount}
+        onLoadEarlier={handleLoadEarlier}
+        renderMessageText={ChatMessage}
+        renderActions={InputToolbarActions}
+        onPressActionButton={toggleEmojiSelector}
+        user={user}
+      />
+      {showEmojiSelector && (
+        <EmojiSelectorWrapper>
+          <EmojiSelector
+            category={Categories.All}
+            onEmojiSelected={handleEmojiSelector}
+          />
+        </EmojiSelectorWrapper>
+      )}
+    </>
   );
 }
+
+const InputToolbarActions = ({ onPressActionButton }: ActionsProps): React.ReactElement => (
+  <ActionsWrapper onPress={onPressActionButton} hitSlop={hitSlop}>
+    <Text>😊</Text>
+  </ActionsWrapper>
+);
+
+const hitSlop = { top: 8, right: 8, bottom: 8, left: 8 };
+
+const ActionsWrapper = styled(TouchableOpacity)`
+  align-self: center;
+`;
+const EmojiSelectorWrapper = styled(ScrollView)`
+  height: ${deviceHeight / 6};
+`;
+
 
 export const ChatPageContainer = connect(
   (state: IStateUnion) => ({
